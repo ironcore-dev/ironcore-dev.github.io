@@ -52,40 +52,61 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting Started:
-    - Overview: getting-started/index.md
-    - IaaS: getting-started/iaas.md
-    - Bare Metal: getting-started/bare-metal.md
-  - Fundamentals:
-      - Understand the Basics: fundamentals/understand-the-basics.md
-      - Core Concepts: fundamentals/core-concepts.md
-      - Operating System: fundamentals/operating-system.md
+    - Infrastructure as a Service: getting-started/iaas.md
+    - Bare Metal Management: getting-started/baremetal.md
   - Architecture:
-      - Overview: architecture/overview.md
-      - IaaS:
-        - Overview: architecture/overview.md
-        - Networking: architecture/networking.md
-        - Integration: architecture/integration.md
-        - Data Flow: architecture/dataflow.md
-      - Bare Metal:
-        - Overview: architecture/overview.md
-        - Networking: architecture/networking.md
-        - Integration: architecture/integration.md
-        - Data Flow: architecture/dataflow.md
-  - Components: 
-      # Add component repo URLs here (Imported repos must have a mkdocs.yml file)
-      - Ironcore: "!import https://github.com/ironcore-dev/ironcore?branch=main"
-      - Ceph Provider: "!import https://github.com/ironcore-dev/ceph-provider?branch=main"
-      - Libvirt Provider: "!import https://github.com/ironcore-dev/libvirt-provider?branch=main"
+      - Infrastructure as a Service:
+        - Overview: architecture/iaas/overview.md
+        - Scheduling and Orchestration: architecture/iaas/scheduling.md
+        - Operating System Images: architecture/iaas/os-images.md
+        - Providers:
+            - Overview: architecture/iaas/providers/overview.md
+            - RuntimeInterface: architecture/iaas/providers/runtime-interface.md
+            - Compute Provider: architecture/iaas/providers/compute.md
+            - Storage Provider: architecture/iaas/providers/storage.md
+        - Networking: architecture/iaas/networking.md
+      - Bare Metal Management:
+        - Overview: architecture/baremetal/overview.md
+        - Discovery: architecture/baremetal/discovery.md
+        - Provisioning: architecture/baremetal/provisioning.md
+        - Maintenance: architecture/baremetal/maintenance.md
   - User Guide:
     - IaaS:
       - Tutorials: user-guide/index.md
     - Bare Metal:
       - Tutorials: user-guide/index.md
+  - Kubernetes Integration:
+      - Infrastructure as a Service:
+        - Overview: kubernetes/iaas/overview.md
+        - CSI Driver: kubernetes/iaas/csi-driver.md
+        - Cloud Controller Manager: kubernetes/iaas/cloud-controller-manager.md
+        - Gardener: kubernetes/iaas/gardener.md
+      - Bare Metal Management:
+        - Overview: kubernetes/baremetal/overview.md
+        - Cloud Controller Manager: kubernetes/baremetal/cloud-controller-manager.md
+        - Metal Load Balancer Controller: kubernetes/baremetal/load-balancer-controller.md
+        - Cluster API: kubernetes/baremetal/cluster-api.md
+        - Gardener: kubernetes/baremetal/gardener.md
   - Operator Guide:
     - IaaS:
       - Landscape Setup: operator-guide/index.md
     - Bare Metal:
       - Landscape Setup: operator-guide/index.md
+  - Components:
+      # Add component repo URLs here (Imported repos must have a mkdocs.yml file)
+      - Infrastructure as a Service:
+        - Ironcore: "!import https://github.com/ironcore-dev/ironcore?branch=main"
+        - Ironcore Net: "!import https://github.com/ironcore-dev/ironcore-net?branch=main"
+        - Libvirt Provider: "!import https://github.com/ironcore-dev/libvirt-provider?branch=main"
+        - Ceph Provider: "!import https://github.com/ironcore-dev/ceph-provider?branch=main"
+#        - Metalnet: "!import https://github.com/ironcore-dev/metalnet?branch=main"
+#        - DPService: "!import https://github.com/ironcore-dev/dpservice?branch=main"
+#        - Metalbond: "!import https://github.com/ironcore-dev/metalbond?branch=main"
+      - Bare Metal Management:
+        - Metal Operator: "!import https://github.com/ironcore-dev/metal-operator?branch=main"
+        - Boot Operator: "!import https://github.com/ironcore-dev/boot-operator?branch=main"
+#        - FeDHCP: "!import https://github.com/ironcore-dev/fedhcp?branch=main"
+#        - IPAM: "!import https://github.com/ironcore-dev/ipam?branch=main"
   - Developer Guide: developer-guide/index.md
 #  - Upgrade Guide: upgrade-guide/index.md
 #  - Troubleshooting: troubleshooting/index.md
