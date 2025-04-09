@@ -51,7 +51,7 @@ The IaaS layer provides a flexible, user-friendly environment to create and mana
 Designed for simplicity and power, this layer abstracts the complexity of resource management, giving you cloud-like 
 control at your fingertips.
 
-**[Get Started with IaaS](getting-started/iaas)** | **[API Reference](components/infrastructure-as-a-service/ironcore/api-reference/overview/)**
+**[Get Started with IaaS](iaas/getting-started)** | **[API Reference](infrastructure-as-a-service/components/ironcore/api-reference/overview/)**
 
 ---
 
@@ -65,7 +65,7 @@ The Bare Metal Automation layer takes server management to the next level, handl
 
 This layer is perfect for those who need fine-grained control over physical hardware without sacrificing automation.
 
-**[Get Started with Bare Metal Automation](getting-started/baremetal)** | **[API Reference](components/bare-metal-management/metal-operator/api-reference/api/)**
+**[Get Started with Bare Metal Automation](baremetal/getting-started)** | **[API Reference](bare-metal-management/components/metal-operator/api-reference/api/)**
 
 ---
 
