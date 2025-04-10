@@ -15,23 +15,31 @@ can transform your workflows.
 
 Here’s a visual representation of IronCore’s two layers:
 
+**Infrastructure as a Service (IaaS)**
+
 ```mermaid
 graph TD
-    A[IronCore] --> B[Infrastructure as a Service<br>IaaS]
-    A --> C[Bare Metal Automation]
+    A["Infrastructure as a Service (IaaS)"]
     
-    B --> D[Compute]
-    B --> E[Networking]
-    B --> F[Storage]
-    
-    C --> G[Server Provisioning]
-    C --> H[Day 2 Operations]
-    C --> I[Lifecycle Management]
+    A --> D[Compute]
+    A --> E[Networking]
+    A --> F[Storage]
     
     D -->|Virtual Machines| J[Workloads]
     E -->|Virtual Networks| K[Connectivity]
     F -->|Block/Object/File| L[Data]
-    
+```
+
+**Bare Metal Automation**
+
+```mermaid
+graph TD
+    A["Bare Metal Automation"] 
+        
+    A --> G[Server Provisioning]
+    A --> H[Day 2 Operations]
+    A --> I[Lifecycle Management]
+     
     G -->|Discovery & Deployment| M[Servers]
     H -->|BIOS/Firmware Updates| N[Maintenance]
     I -->|Health Monitoring| O[Reliability]

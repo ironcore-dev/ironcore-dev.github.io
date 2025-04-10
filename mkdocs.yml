@@ -64,13 +64,13 @@ nav:
             - Storage Provider: iaas/architecture/providers/storage.md
         - Networking: iaas/architecture/networking.md
       - User Guide:
-        - Tutorials: iaas/user-guide/index.md
+        - Tutorials: iaas/user-guide/overview.md
       - Kubernetes Integration:
         - Overview: iaas/kubernetes/overview.md
         - CSI Driver: iaas/kubernetes/csi-driver.md
         - Cloud Controller Manager: iaas/kubernetes/cloud-controller-manager.md
         - Gardener: iaas/kubernetes/gardener.md
-      - Operator Guide:
+      - Operations Guide:
           - Overview: iaas/operations-guide/overview.md
           - Landscape Setup: iaas/operations-guide/landscape-setup.md
       - Components:
@@ -90,14 +90,14 @@ nav:
         - Provisioning: baremetal/architecture/provisioning.md
         - Maintenance: baremetal/architecture/maintenance.md
       - User Guide:
-        - Tutorials: baremetal/user-guide/index.md
+        - Tutorials: baremetal/user-guide/overview.md
       - Kubernetes Integration:
         - Overview: baremetal/kubernetes/overview.md
         - Cloud Controller Manager: baremetal/kubernetes/cloud-controller-manager.md
         - Metal Load Balancer Controller: baremetal/kubernetes/load-balancer-controller.md
         - Cluster API: baremetal/kubernetes/cluster-api.md
         - Gardener: baremetal/kubernetes/gardener.md
-      - Operator Guide:
+      - Operations Guide:
           - Overview: baremetal/operations-guide/overview.md
           - Landscape Setup: baremetal/operations-guide/landscape-setup.md
       - Components:
@@ -105,15 +105,15 @@ nav:
         - Boot Operator: "!import https://github.com/ironcore-dev/boot-operator?branch=main"
 #        - FeDHCP: "!import https://github.com/ironcore-dev/fedhcp?branch=main"
 #        - IPAM: "!import https://github.com/ironcore-dev/ipam?branch=main"
-  - Developer Guide: developer-guide/index.md
-#  - Upgrade Guide: upgrade-guide/index.md
-#  - Troubleshooting: troubleshooting/index.md
+  - Developer Guide: developer-guide/overview.md
+#  - Upgrade Guide: upgrade-guide/overview.md
+#  - Troubleshooting: troubleshooting/overview.md
   - Contribute:
     - Style Guide: contribute/style-guide.md
     - Contributing: contribute/contributing.md
-#  - Support: support/index.md
-#  - Roadmap: roadmap/index.md
-#  - Releases: releases/index.md
+#  - Support: support/overview.md
+#  - Roadmap: roadmap/overview.md
+#  - Releases: releases/overview.md
 
 extra:
   social:
