@@ -5,13 +5,13 @@
 CONTAINER_TOOL ?= docker
 
 # Docker image name for the mkdocs based local development setup
-IMAGE=ironcore-dev/multi-repo-docs
+IMAGE=ironcore-dev/docs
 
-.PHONY: start-docs
-start-docs: ## Start the local mkdocs based development environment.
-	$(CONTAINER_TOOL) build -t ${IMAGE} -f docs/Dockerfile . --load
-	$(CONTAINER_TOOL) run -p 8000:8000 -v `pwd`/:/docs ${IMAGE}
+.PHONY: startdocs
+startdocs: ## Start the local mkdocs based development environment.
+	docker build -t $(IMAGE) -f docs/Dockerfile . --load
+	docker run --rm -p 5173:5173 -v `pwd`/:/app $(IMAGE)
 
-.PHONY: clean-docs
-clean-docs: ## Remove all local mkdocs Docker images (cleanup).
-	$(CONTAINER_TOOL) container prune --force --filter "label=project=ironcore_project_multi_repo_docs"
+.PHONY: cleandocs
+cleandocs: ## Remove all local mkdocs Docker images (cleanup).
+	docker container prune --force --filter "label=project=ironcore_docs"

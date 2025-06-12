@@ -1,88 +1,36 @@
-# Welcome to IronCore Documentation
-
-IronCore is an open-source platform designed to empower users with robust infrastructure management and bare metal 
-automation. Built with flexibility and scalability in mind, IronCore combines two powerful **layers** to streamline 
-your computing needs: an **Infrastructure as a Service (IaaS)** layer and a **Bare Metal Automation** layer. Whether 
-you're managing cloud-like resources or maintaining physical servers, IronCore has you covered.
-
-## Overview
-
-IronCore bridges the gap between virtualized infrastructure and physical hardware management, offering a unified 
-solution for developers, system administrators, and enterprises. Explore the two core layers below to see how IronCore
-can transform your workflows.
-
-### IronCore Architecture
-
-Here’s a visual representation of IronCore’s two layers:
-
-**Infrastructure as a Service (IaaS)**
-
-```mermaid
-graph TD
-    A["Infrastructure as a Service (IaaS)"]
-    
-    A --> D[Compute]
-    A --> E[Networking]
-    A --> F[Storage]
-    
-    D -->|Virtual Machines| J[Workloads]
-    E -->|Virtual Networks| K[Connectivity]
-    F -->|Block/Object/File| L[Data]
-```
-
-**Bare Metal Automation**
-
-```mermaid
-graph TD
-    A["Bare Metal Automation"] 
-        
-    A --> G[Server Provisioning]
-    A --> H[Day 2 Operations]
-    A --> I[Lifecycle Management]
-     
-    G -->|Discovery & Deployment| M[Servers]
-    H -->|BIOS/Firmware Updates| N[Maintenance]
-    I -->|Health Monitoring| O[Reliability]
-```
-
 ---
+# https://vitepress.dev/reference/default-theme-home-page
+layout: home
 
-### Infrastructure as a Service (IaaS)
+hero:
+  name: "IronCore"
+  text: "Cloud Native Infrastructure as a Service and Bare Metal Automation"
+  tagline: "IronCore is an open-source platform designed to empower users with robust infrastructure management and bare metal automation"
+  image:
+    src: https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg
+    alt: IronCore
+  actions:
+    - theme: brand
+      text: Overview
+      link: /overview/
+    - theme: alt
+      text: Infrastructure as a Service
+      link: /iaas/getting-started
+    - theme: alt
+      text: Bare Metal Automation
+      link: /baremetal/getting-started
 
-The IaaS layer provides a flexible, user-friendly environment to create and manage **Compute**, **Networking**, and 
-**Storage** resources. With IronCore, you can:
-
-- **Compute**: Spin up virtual machines or containers tailored to your workload needs.
-- **Networking**: Configure virtual networks, load balancers, and firewalls with ease.
-- **Storage**: Provision scalable block, object, or file storage to suit your applications.
-
-Designed for simplicity and power, this layer abstracts the complexity of resource management, giving you cloud-like 
-control at your fingertips.
-
-**[Get Started with IaaS](iaas/getting-started)** | **[API Reference](infrastructure-as-a-service/components/ironcore/api-reference/overview/)**
-
+features:
+  - title: 🔍 Automatic Discovery & Provisioning
+    details: Detect and provision bare metal servers automatically using Kubernetes-native CRDs.
+  - title: 🧰 Declarative Day-2 Operations
+    details: Manage BIOS, firmware, and hardware inventory declaratively via Kubernetes.
+  - title: ☁️ Modular IaaS Building Blocks
+    details: Pluggable compute, storage, and networking providers designed for hybrid and edge deployments.
+  - title: 🔗 Native Kubernetes Integration
+    details: Seamless integration with CSI, CCM, Cluster API, and Gardener.
+  - title: 🧱 Composable, Reusable Components
+    details: Reuse standalone modules like Metal Operator, Libvirt, or Ceph Providers across environments.
+  - title: 👨‍💻 DevOps-Ready by Design
+    details: End-to-end infrastructure and lifecycle management powered by a declarative Kubernetes API.
 ---
-
-### Bare Metal Automation
-
-The Bare Metal Automation layer takes server management to the next level, handling everything from provisioning to ongoing maintenance. Key features include:
-
-- **Server Provisioning**: Automate the discovery, configuration, and deployment of bare metal servers.
-- **Day 2 Operations**: Simplify maintenance tasks like OS updates, BIOS/firmware upgrades, and hardware diagnostics.
-- **Lifecycle Management**: Monitor and manage server health, ensuring peak performance and reliability.
-
-This layer is perfect for those who need fine-grained control over physical hardware without sacrificing automation.
-
-**[Get Started with Bare Metal Automation](baremetal/getting-started)** | **[API Reference](bare-metal-management/components/metal-operator/api-reference/api/)**
-
----
-
-## Why IronCore?
-
-- **Open Source**: Fully transparent, community-driven, and free to use.
-- **Dual-Layer Design**: Seamlessly integrate IaaS and bare metal management in one platform. Or use them independently.
-- **Scalable**: From small deployments to enterprise-grade clusters, IronCore grows with you.
-
-## Get Involved
-
-- **[GitHub Repository](https://github.com/ironcore-dev)**: Explore the code, report issues, or submit pull requests.
