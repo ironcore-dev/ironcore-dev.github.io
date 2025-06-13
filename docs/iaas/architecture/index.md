@@ -1,4 +1,4 @@
-# IaaS Architecture
+# Infrastructure as a Service Architecture Overview
 
 The Infrastructure as a Service (IaaS) layer of IronCore is a modular and scalable system designed to manage compute,
 networking, and storage resources efficiently. This page provides an in-depth overview of the core components that 
@@ -9,32 +9,7 @@ make up the IaaS layer, their roles, and how they interact to deliver a seamless
 The IaaS layer of IronCore is composed of several interconnected components, each responsible for a specific aspect 
 of infrastructure management. The following diagram illustrates the architecture:
 
-```mermaid
-%%{
-  init: {
-    "theme": "neutral",
-    "fontFamily": "monospace",
-    "logLevel": "info",
-    "flowchart": {
-      "htmlLabels": true,
-      "curve": "linear"
-    },
-    "sequence": {
-      "mirrorActors": true
-    }
-  }
-}%%
-block-beta
-    block:ID
-        columns 2
-        A["ironcore"]
-        B["ironcore-net"]
-        C["metalnet + dpservice"]
-        D["metalbond"]
-        E["libvirt-provider"]
-        F["ceph-provider"]
-    end
-```
+![Architecture Overview](/architecture-overview.png)
 
 ### Core Components
 
