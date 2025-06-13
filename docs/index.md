@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "IronCore"
+  name: "IronCore Project"
   text: "Cloud Native Infrastructure as a Service and Bare Metal Automation"
   tagline: "IronCore is an open-source platform designed to empower users with robust infrastructure management and bare metal automation"
   image:

@@ -14,6 +14,8 @@ export default withMermaid({
       {text: 'Bare Metal Automation', link: '/baremetal/getting-started'},
     ],
 
+    head: [['link', { rel: 'icon', href: '/assets/favicon/favicon.ico' }]],
+
     logo: {
       src: 'https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg',
       width: 24,
@@ -47,10 +49,10 @@ export default withMermaid({
             collapsed: false,
             items: [
                 { text: 'Overview', link: '/iaas/architecture/' },
+                { text: 'Scheduling and Orchestration', link: '/iaas/architecture/scheduling' },
                 { text: 'Runtime Interface', link: '/iaas/architecture/runtime-interface' },
                 { text: 'Networking', link: '/iaas/architecture/networking' },
                 { text: 'Operating System Images', link: '/iaas/architecture/os-images' },
-                { text: 'Scheduling and Orchestration', link: '/iaas/architecture/scheduling' },
             ],
         },
         {
@@ -60,6 +62,7 @@ export default withMermaid({
             { text: 'Overview', link: '/iaas/architecture/providers/' },
             { text: 'Compute', link: '/iaas/architecture/providers/compute' },
             { text: 'Storage', link: '/iaas/architecture/providers/storage' },
+            { text: 'Brokers', link: '/iaas/architecture/providers/brokers' },
           ],
         },
         {
@@ -69,6 +72,19 @@ export default withMermaid({
             { text: 'Cloud Controller Manager', link: '/iaas/kubernetes/cloud-controller-manager' },
             { text: 'CSI Driver', link: '/iaas/kubernetes/csi-driver' },
             { text: 'Gardener Integration', link: '/iaas/kubernetes/gardener' },
+          ],
+        },
+        {
+          text: "API References",
+          collapsed: false,
+          items: [
+            { text: 'Overview', link: '/iaas/api-references/' },
+            { text: 'Core', link: '/iaas/api-references/core' },
+            { text: 'Compute', link: '/iaas/api-references/compute' },
+            { text: 'Storage', link: '/iaas/api-references/storage' },
+            { text: 'Networking', link: '/iaas/api-references/networking' },
+            { text: 'IPAM', link: '/iaas/api-references/ipam' },
+            { text: 'Common', link: '/iaas/api-references/common' },
           ],
         },
       ],

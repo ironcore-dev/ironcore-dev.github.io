@@ -87,12 +87,3 @@ The components of the IaaS layer work in tandem to provide a cohesive infrastruc
 
 This modular design allows each component to operate independently while integrating seamlessly, enabling IronCore to 
 scale from small deployments to large, enterprise-grade clusters.
-
-## Next Steps
-
-TODO: define next steps for users to explore the IaaS layer further.
-
-- Learn how to set up the IaaS layer: **[Get Started with IaaS](#)**
-- Explore the APIs for managing resources: **[API Reference](#)**
-- Dive into networking configurations: **[Networking Guide](#)**
-- Understand storage integration: **[Storage Guide](#)**
