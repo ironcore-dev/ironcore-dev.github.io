@@ -50,6 +50,18 @@ export default withMermaid({
             ],
         },
         {
+          text: 'Usage Guides',
+          collapsed: true,
+          items: [
+              { text: 'Overview', link: '/iaas/usage-guides/' },
+              { text: 'Compute', link: '/iaas/usage-guides/compute'},
+              { text: 'Networking', link: '/iaas/usage-guides/networking' },
+              { text: 'Storage', link: '/iaas/usage-guides/storage' },
+              { text: 'IPAM', link: '/iaas/usage-guides/ipam' },
+              { text: 'Core', link: '/iaas/usage-guides/core' },
+          ],
+        },
+        {
             text: "Architecture",
             collapsed: false,
             items: [

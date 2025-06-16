@@ -1,4 +1,4 @@
-# Getting Started with IronCore (IaaS)
+# Getting started with Infrastructure as a Service
 
 TODO:
 
