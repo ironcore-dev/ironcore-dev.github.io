@@ -14,6 +14,11 @@ export default withMermaid({
       {text: 'Bare Metal Automation', link: '/baremetal/getting-started'},
     ],
 
+    editLink: {
+      pattern: 'https://github.com/ironcore-dev/docs/blob/main/docs/:path',
+      text: 'Edit this page on GitHub'
+    },
+
     head: [['link', { rel: 'icon', href: '/assets/favicon/favicon.ico' }]],
 
     logo: {
@@ -76,7 +81,7 @@ export default withMermaid({
         },
         {
           text: "API References",
-          collapsed: false,
+          collapsed: true,
           items: [
             { text: 'Overview', link: '/iaas/api-references/' },
             { text: 'Core', link: '/iaas/api-references/core' },
