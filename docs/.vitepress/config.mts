@@ -19,6 +19,13 @@ export default withMermaid({
       text: 'Edit this page on GitHub'
     },
 
+    footer: {
+      copyright: 'Copyright © Linux Foundation Europe. IronCore is a project of Linux Foundation Europe. For applicable' +
+          ' policies including privacy policy, terms of use and trademark usage guidelines, please see ' +
+          '<a href=https://linuxfoundation.eu>https://linuxfoundation.eu</a>. Linux is a registered trademark of ' +
+          'Linus Torvalds.'
+    },
+
     head: [['link', { rel: 'icon', href: '/assets/favicon/favicon.ico' }]],
 
     logo: {
