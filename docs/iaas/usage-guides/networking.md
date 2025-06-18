@@ -4,7 +4,6 @@
 
 A `Network` resource in IronCore refers to a logically isolated network (Layer 3). This further allows you to fully 
 control your networking environment, including resource placement, connectivity, peering and security. 
-The `NetworkReconciler` leverages this information to create a Network in the IronCore infrastructure.
 
 ### Example Network Resource
 
@@ -177,9 +176,6 @@ spec:
 In the IronCore API, a `NATGateway` (Network Address Translation Gateway) facilitates outbound internet connectivity in
 private subnets, ensuring that instances in private subnets can access external services without exposing them to 
 unauthorized inbound traffic.
-
-It is a critical network service that provides secure and controlled internet access for private resources in the 
-IronCore infrastructure. It is enforced by the underlying IronCore's network plugin called <a href="https://github.com/ironcore-dev/ironcore-net/blob/main/apinetlet/controllers/natgateway_controller.go"> ironcore-net </a>
 
 ### Example NATGateway Resource
 

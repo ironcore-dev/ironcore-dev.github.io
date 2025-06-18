@@ -5,8 +5,7 @@
 A `ResourceQuota` in IronCore provides a mechanism to manage and limit the usage of resources across multiple 
 requesting entities. This allows protecting the system from usage spikes and services can be kept responsive. With the 
 help of `ResourceQuota` a hard limit with a list of resources along with `ScopeSelector` can be set for `Namespace` and
-restricted hereby the amount of resources a user can create. The `ResourcequotaController` reconciler leverages this 
-information to create a `ResourceQuota` in IronCore infrastructure.
+restricted hereby the amount of resources a user can create. 
 
 ::: tip
 `ResourceQuota` is a namespaced resource, and it can only limit resource count/accumulated resource usage within a defined namespace.

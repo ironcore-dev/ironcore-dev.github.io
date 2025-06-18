@@ -3,10 +3,7 @@
 ## Machine
 
 A `Machine` resource in IronCore is used to represent a compute resource or a virtual machine. It serves as a means to 
-configure network, storage, type of machine and other information needed to create a VM. The `MachineController` 
-reconciler leverages this information to determine where the machine needs to be created and the type of machine that 
-needs to be created along with the required `Network` and `Storage` configuration which will be further passed to 
-respective `NetworkController` and `StorageController`.
+configure network, storage, type of machine and other information needed to create a compute instance.
 
 ### Example Machine Resource
 
@@ -52,12 +49,6 @@ spec:
 - **Make Scheduling Decisions**: The scheduler selects the most suitable machine pool based on resource availability and other policies.
 - **Update Cache**: The scheduler updates the cache with recalculated allocatable `machineClass` quantities.
 - **Assign MachinePoolRef**: The scheduler assigns the selected `machinePoolRef` to the machine object.
-
-2. **IRI Machine Creation and Brokering**:
-- The `Machine` is allocated to a particular pool via the scheduler.
-- The `machinepoollet` responsible for this pool picks up the `Machine` resource and extracts the `ignitionData`, `networkInterfaces` and `volumes` information from the `spec` and prepares the IRI machine object.
-- Once the `IRIMachine` object is prepared the `Machine` create/update request is sent to a broker via the IRI interface(via GRPC call) either against a broker (to copy the resource into another cluster) OR a provider implementation e.g. libvirt-provider which creates a corresponding machine against libvirt/QEMU.
-- Once the response is received from IRI call Machine status is updated with the status received.
 
 More information on how the IRI contract works can be found in the [IronCore Runtime Interface (IRI)](/iaas/architecture/runtime-interface) section.
 
@@ -127,10 +118,3 @@ spec:
 
 - `ProviderID`(`string`):  The `providerId` helps the controller identify and communicate with the correct compute 
   system within the specific backend compute provider.
-
-### Reconciliation Process
-
-- **Machine Type Discovery**: It constantly checks what kinds of `MachineClasses` are available in the IronCore infrastructure
-- **Compatibility Check**: Evaluating whether the `MachinePool` can manage available `MachineClasses` based on its `capabilities`.
-- **Status Update**: Updating the MachinePool's status to indicate the supported `MachineClasses` with available capacity and allocatable.
-- **Event Handling**: Watches for changes in MachineClass resources and ensures the associated MachinePool is reconciled when relevant changes occur.
