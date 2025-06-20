@@ -10,7 +10,7 @@ There are three main runtime interfaces in IronCore:
 - `BucketRuntime`: This interface is used for managing object storage, such as S3-compatible buckets.
 
 Implementations of these interfaces are done by provider-specific components. More infomation about the provider can
-be found in the [provider concept documentation](/iaas/architecture/providers/index.md).
+be found in the [provider concept documentation](/iaas/architecture/providers/).
 
 The definition of the runtime interfaces can be found in IronCores [`iri` package](https://github.com/ironcore-dev/ironcore/tree/main/iri/).
 
