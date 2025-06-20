@@ -93,6 +93,7 @@ export default withMermaid({
           text: "Kubernetes Integration",
           collapsed: false,
           items: [
+            { text: 'Overview', link: '/iaas/kubernetes/' },
             { text: 'Cloud Controller Manager', link: '/iaas/kubernetes/cloud-controller-manager' },
             { text: 'CSI Driver', link: '/iaas/kubernetes/csi-driver' },
             { text: 'Gardener Integration', link: '/iaas/kubernetes/gardener' },
