@@ -1,18 +1,22 @@
 # Container Storage Interface (CSI) Driver
 
-The [Container Storage Interface (CSI)](https://kubernetes.io/docs/concepts/storage/volumes/#csi) driver is a standardized way for Kubernetes to interact with storage systems. The IronCore CSI driver enables Kubernetes to manage IronCore volumes as Persistent Volumes (PVs) and Persistent Volume Claims (PVCs). The driver implements the [CSI specification](https://github.com/container-storage-interface/spec/blob/master/spec.md) to provide storage management capabilities.
+The [Container Storage Interface (CSI)](https://kubernetes.io/docs/concepts/storage/volumes/#csi) driver is a standardized 
+way for Kubernetes to interact with storage systems. The IronCore CSI driver enables Kubernetes to manage IronCore 
+volumes as Persistent Volumes (PVs) and Persistent Volume Claims (PVCs). The driver implements the 
+[CSI specification](https://github.com/container-storage-interface/spec/blob/master/spec.md) to provide storage 
+management capabilities.
 
 ## IronCore CSI Driver Integration
 
-The [Ironcore CSI Driver](https://github.com/ironcore-dev/ironcore-csi-driver)  is implemented as a Kubernetes storage plugin that bridges the gap between Kubernetes storage management and IronCore's storage infrastructure. Here's how the integration works:
+The [Ironcore CSI Driver](https://github.com/ironcore-dev/ironcore-csi-driver) is implemented as a Kubernetes storage 
+plugin that bridges the gap between Kubernetes storage management and IronCore's `storage` resource types. 
 
-### Architecture Components
+The core components of the IronCore CSI driver include:
 
 - **CSI Controller Plugin**: Runs as a deployment in the Kubernetes cluster and handles volume provisioning, deletion, and attachment operations
 - **CSI Node Plugin**: Runs as a DaemonSet on each Kubernetes node and manages volume mounting and unmounting operations
-- **IronCore API Integration**: Communicates with IronCore's API to manage volume resources
 
-### Storage Class Configuration
+## `StorageClass` Configuration
 
 The CSI driver supports various storage class parameters for customizing volume provisioning:
 
@@ -21,12 +25,11 @@ The CSI driver supports various storage class parameters for customizing volume 
 
 ### Volume Management
 
-The CSI driver integrates with IronCore's volume management system to provide:
+The CSI driver integrates with IronCore's `storage` API to provide:
 
 - Dynamic provisioning of volumes based on PVC specifications
 - Volume attachment and detachment operations
 - Volume resizing capabilities
-- Snapshot and backup functionality
 
 ### Node Integration
 
@@ -39,7 +42,8 @@ On each Kubernetes node, the CSI driver:
 
 ## Volume Lifecycle Management
 
-The CSI driver manages the complete lifecycle of volumes in Kubernetes, from creation to deletion. Here's a detailed explanation of how the APIs are implemented in the IronCore CSI driver for different volume operations.
+The CSI driver manages the complete lifecycle of volumes in Kubernetes, from creation to deletion. Here's a detailed 
+explanation of how the APIs are implemented in the IronCore CSI driver for different volume operations.
 
 ### Volume Creation
 
@@ -108,7 +112,7 @@ The CSI driver also runs as a controller plugin to manage volume provisioning an
 
 ## Volume Expansion
 
-The CSI driver supports online volume expansion, allowing volumes to be resized without downtime.
+The CSI driver supports online volume expansion (if allowed by the `StorageClass`), allowing volumes to be resized without downtime.
 
 **ExpandVolume**
 
@@ -117,21 +121,3 @@ The CSI driver supports online volume expansion, allowing volumes to be resized 
 - Resizes the volume in IronCore
 - Updates the filesystem if necessary
 - Returns the new size of the volume
-
-## Volume Snapshot
-
-The driver supports volume snapshots for backup and restore operations.
-
-**CreateSnapshot**
-
-- CreateSnapshot is called when a volume snapshot is requested
-- Creates a snapshot of the specified volume
-- Stores snapshot metadata
-- Returns a unique snapshot ID
-
-**DeleteSnapshot**
-
-- DeleteSnapshot is called when a snapshot needs to be deleted
-- Removes the snapshot from IronCore
-- Cleans up any associated resources
-- Ensures proper cleanup of snapshot data
