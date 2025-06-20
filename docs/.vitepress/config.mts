@@ -86,7 +86,7 @@ export default withMermaid({
             { text: 'Overview', link: '/iaas/architecture/providers/' },
             { text: 'Brokers', link: '/iaas/architecture/providers/brokers' },
             { text: 'libvirt-provider', link: '/iaas/architecture/providers/libvirt-provider' },
-            { text: 'Storage', link: '/iaas/architecture/providers/storage' },
+            { text: 'ceph-provider', link: '/iaas/architecture/providers/ceph-provider' },
           ],
         },
         {

@@ -20,7 +20,7 @@ graph TD
     
     D -->|Virtual Machines| J[Workloads]
     E -->|Virtual Networks| K[Connectivity]
-    F -->|Block/Object/File| L[Data]
+    F -->|Block/Object| L[Data]
 ```
 
 **Bare Metal Automation**
