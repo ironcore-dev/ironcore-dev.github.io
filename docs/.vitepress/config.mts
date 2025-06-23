@@ -11,7 +11,7 @@ export default withMermaid({
       {text: 'Home', link: '/'},
       {text: 'Overview', link: '/overview'},
       {text: 'Infrastructure as a Service', link: '/iaas/getting-started'},
-      {text: 'Bare Metal Automation', link: '/baremetal/getting-started'},
+      {text: 'Bare Metal Automation', link: '/baremetal/'},
     ],
 
     editLink: {
@@ -115,11 +115,7 @@ export default withMermaid({
       ],
     '/baremetal/': [
       {
-        text: 'Bare Metal Automation',
-        collapsed: false,
-        items: [
-          { text: 'Getting Started', link: '/baremetal/getting-started' },
-        ],
+        text: 'Overview', link: '/baremetal/',
       },
       {
         text: "Architecture",
@@ -139,6 +135,15 @@ export default withMermaid({
           { text: 'Metal Loadbalancer Controller', link: '/baremetal/kubernetes/metal-loadbalancer-controller' },
           { text: 'Cluster API Provider', link: '/baremetal/kubernetes/capi' },
           { text: 'Gardener Integration', link: '/baremetal/kubernetes/gardener' },
+        ],
+      },
+      {
+        text: "API References",
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/baremetal/api-references/' },
+          { text: 'metal-operator', link: '/baremetal/api-references/metal-operator' },
+          { text: 'boot-operator', link: '/baremetal/api-references/boot-operator' },
         ],
       },
     ],

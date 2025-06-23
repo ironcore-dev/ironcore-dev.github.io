@@ -68,4 +68,4 @@ The Bare Metal Automation layer takes server management to the next level, handl
 
 This layer is perfect for those who need fine-grained control over physical hardware without sacrificing automation.
 
-**[Get Started with Bare Metal Automation](/baremetal/getting-started)**
+**[Get Started with Bare Metal Automation](/baremetal/)**

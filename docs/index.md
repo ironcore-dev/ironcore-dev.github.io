@@ -18,7 +18,7 @@ hero:
       link: /iaas/getting-started
     - theme: alt
       text: Bare Metal Automation
-      link: /baremetal/getting-started
+      link: /baremetal/
 
 features:
   - title: 🔍 Automatic Discovery & Provisioning
