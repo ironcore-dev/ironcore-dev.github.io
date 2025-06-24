@@ -5,6 +5,7 @@ export default withMermaid({
   title: "IronCore Project",
   description: "Welcome to IronCore Documentation",
   base: "/docs/",
+  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -25,8 +26,6 @@ export default withMermaid({
           '<a href=https://linuxfoundation.eu>https://linuxfoundation.eu</a>. Linux is a registered trademark of ' +
           'Linus Torvalds.'
     },
-
-    head: [['link', { rel: 'icon', href: '/assets/favicon/favicon.ico' }]],
 
     logo: {
       src: 'https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg',
@@ -146,8 +145,7 @@ export default withMermaid({
           { text: 'boot-operator', link: '/baremetal/api-references/boot-operator' },
         ],
       },
-    ],
-  },
+    ]},
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/ironcore-dev/' }
