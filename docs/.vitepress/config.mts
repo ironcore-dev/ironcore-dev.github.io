@@ -11,8 +11,11 @@ export default withMermaid({
     nav: [
       {text: 'Home', link: '/'},
       {text: 'Overview', link: '/overview'},
-      {text: 'Infrastructure as a Service', link: '/iaas/getting-started'},
-      {text: 'Bare Metal Automation', link: '/baremetal/'},
+      {text: 'Documentation',
+      items: [
+        {text: 'Infrastructure as a Service', link: '/iaas/getting-started'},
+        {text: 'Bare Metal Automation', link: '/baremetal/'},
+      ]},
     ],
 
     editLink: {
