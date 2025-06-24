@@ -2,8 +2,15 @@
 
 ## Overview
 
-IronCore's networking architecture is designed to provide a robust and flexible networking solution. It consists of 
-several components that work together to ensure network out and inbound connectivity and isolation for `Machine` instances.
+IronCore's virtual networking architecture provides an end-to-end virtual networking solution for provisioned `Machine`s running in data centers, regardless they are baremetal machines or virtual machines. It is designed to enable robust, flexible and performing networking control plane and data plane.
+
+- **Robust**: IronCore's virtual netowrking control plane is mainly implemented using Kubernetes controller model. Thus, it is able to survive component's failure and recover the running states by retrieving the desired networking configuration.
+- **Flexible**: Thanks to the modular and layered architecture design, IronCore's virtual networking solution allows developers to implement and interchange components from the most top-level data center management system built upon defined IronCore APIs, to lowest-level packet processing engines depending on the used hardware.
+- **Performing**: The data plane of IronCore's virtual networking solution is built with the state-of-the-art packet processing framework, [DPDK](https://www.dpdk.org), and currently utilizes the hardware offloading features of [Nvidia's Mellanox SmartNic serials](https://www.nvidia.com/en-us/networking/ethernet-adapters/) to speedup packet processing. With the DPDK's run-to-completion model, IronCore's networking data plane can achieve high performance even in the environment where hardware offloading capability is limited or disabled. 
+
+IronCore's virtual networking architecture is illustrated with the following figure. It consists of several components that work together to ensure network out and inbound connectivity and isolation for `Machine` instances.
+
+![IronCore Virtual Networking](/ironcore-net-overview.png)
 
 The main elements involved in IronCore's networking are:
 - [**ironcore**](https://github.com/ironcore-dev/ironcore): Core networking component that manages network resources and configurations. For more details, see the 
@@ -49,15 +56,6 @@ to `ironcore-net`.
 A similar flow happens for `Networks`, `LoadBalancer` and `NatGateways` resources, where the `apinetlet` is responsible
 for translating and allocating the necessary resources in `ironcore-net` to ensure that the networking requirements are met.
 
-### `metalnet` and `dpservice`
-
-As mentioned above, `metalnet` is responsible for cluster-level networking capabilities. It provides the necessary API
-to manage `Networks`, `NetworkInterfaces`, and other networking resources that are required for `Machines` on a hypervisor host.
-
-TODO: describe how `metalnet` and `dpservice` work in detail and interact with each other.
-
-![Cluster Level Networking](/cluster-networking.png)
-
 ### `metalnetlet` and `metalnet`
 
 `metalnetlet` and `metalnet` work together to provide the necessary networking capabilities for `Machines` in an IronCore on 
@@ -85,8 +83,15 @@ use the PCI address in the status to attach the virtual network interface to the
 `LoadBalancer` and `NATGateways` resources follow a similar flow. Here, however, the compute provider is not involved. 
 The `apinetlet` will translate the `ironcore` `LoadBalancer` or `NATGateway` resource into the corresponding `ironcore-net`
 objects. Those will be scheduled on `ironcore-net` `Nodes`. Onces this is done, the `metalnetlet` will watch those resources
-and create the corresponding `LoadBalancer` or `NATGateway` objects in the `metalnet` API. 
+and create the corresponding `LoadBalancer` or `NATGateway` objects in the `metalnet` API.
 
-### Role of `metalbond`
+### `metalnet`, `dpservice` and `metalbond`
 
-TODO: describe the role of `metalbond` in route announcements and how it interacts with `dpservice` and `metalnet`.
+As mentioned above, `metalnet` is responsible for cluster-level networking capabilities. It provides the necessary API
+to manage `Networks`, `NetworkInterfaces`, and other networking resources that are required for `Machines` on a hypervisor host. `dpservice` receives configurations, such as an activated interface with configured IP address or networking policies, via gRPC interfaces from `metalnet`. Meanwhile, `metalbond` is responsible for distributing encapsulation routes among instances of `metalnet`. 
+
+The following figure depicts the basic working flow of creating two interfaces for the same virtual private network. 
+
+![Metalnet Dpservice Metalbond](/metalnet-dpservice-metalbond.png)
+
+`metalnet` controllers watch the metalnet objects such as `Network` and `NetworkInterface`. Upon arriving of a new `NetworkInterface`, `metalnet` communicates with `dpservice` to obtain a newly generated underlying IPv6 address for a corresponding interface's overlay IP address. For example, on `Server-A`, `metalnet` obtains an underlying IPv6 address, `2001:db8::1`, for `interface-A` with a private IP `10.0.0.1`. This encapsulation routing information is announced by `metalnet`'s embedded `metalbond-client` to `metalbond-server` running on a region router, and further synchronised by other `metalbond` instances. For instance, `metalbond` on `Server-B` shall receive this `10.0.0.1@2001:db8::1` information and push it into its local `dpservice` via gRPC. `dpservice` uses these routing information to perform overlay packet encapsulation and decapsulation to achieve communication among VMs running on different servers. Meanwhile, `metalnet` also picks a pci addresss of a VF, such as `0000:3b:00.2`, and attach it as part of `NetworkInterface` status, which is further utilised by `ironcore-net` and `vm-provider`/`libvirt-provider` to create a VM.
