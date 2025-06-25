@@ -19,7 +19,7 @@ export default withMermaid({
     ],
 
     editLink: {
-      pattern: 'https://github.com/ironcore-dev/docs/blob/main/docs/:path',
+      pattern: 'https://github.com/ironcore-dev/ironcore-dev.github.io/blob/main/docs/:path',
       text: 'Edit this page on GitHub'
     },
 

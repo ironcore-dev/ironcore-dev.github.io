@@ -23,16 +23,16 @@ The IronCore Documentation project uses Github to manage reviews of pull request
 
 * If you have a trivial fix or improvement, go ahead and create a pull request and
 address (with @...) a suitable maintainer of this repository 
-(see [CODEOWNERS](https://github.com/ironcore-dev/docs/blob/main/CODEOWNERS) 
+(see [CODEOWNERS](https://github.com/ironcore-dev/ironcore-dev.github.io/blob/main/CODEOWNERS) 
 of this repository) in the description of the pull request.
 
 * If you plan to do something more involved, first discuss your ideas by creating an 
-[issue](https://github.com/ironcore-dev/docs/issues) for this repository. This will avoid unnecessary work and surely give you 
+[issue](https://github.com/ironcore-dev/ironcore-dev.github.io/issues) for this repository. This will avoid unnecessary work and surely give you 
 and us a good deal of inspiration.
 
 !!! note 
     Please follow these style guidelines to have your contribution considered by the maintainers:
-    [Documentation style guidelines](https://github.com/ironcore-dev/docs/blob/main/docs/contribute/style-guide.md)
+    [Documentation style guidelines](https://github.com/ironcore-dev/ironcore-dev.github.io/blob/main/docs/contribute/style-guide.md)
 
 ## Steps to Contribute
 
@@ -68,7 +68,7 @@ process. We use [the standard DCO text of the Linux Foundation](https://develope
 * Fork and clone the repository to your local machine.
 
 ```shell
-git clone git@github.com:ironcore-dev/docs.git
+git clone git@github.com:ironcore-dev/ironcore-dev.github.io.git
 cd docs
 ```
 

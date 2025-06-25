@@ -1,7 +1,7 @@
 version = 1
 SPDX-PackageName = "docs"
 SPDX-PackageSupplier = "IronCore authors <ospo@sap.com>"
-SPDX-PackageDownloadLocation = "https://github.com/ironcore-dev/docs"
+SPDX-PackageDownloadLocation = "https://github.com/ironcore-dev/ironcore-dev.github.io"
 
 [[annotations]]
 path = [

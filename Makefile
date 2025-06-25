@@ -5,7 +5,7 @@
 CONTAINER_TOOL ?= docker
 
 # Docker image name for the mkdocs based local development setup
-IMAGE=ironcore-dev/docs
+IMAGE=ironcore-dev/ironcore-dev.github.io
 
 .PHONY: startdocs
 startdocs: ## Start the local mkdocs based development environment.
