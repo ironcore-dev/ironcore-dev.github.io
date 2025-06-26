@@ -16,6 +16,10 @@ The core components of the baremetal automation in IronCore include:
 - [**Boot Operator**](https://github.com/ironcore-dev/boot-operator): iPXE and HTTP boot server that provides boot images and Ignition configurations.
 - [**FeDHCP**](https://github.com/ironcore-dev/fedhcp): A DHCP server that provides inband and out of band network configuration to bare metal servers.
 
+## Concepts and Usage Guides
+
+Usage guides and concepts for the `metal-operator` API types can be found in the [metal-operator documentation](https://ironcore-dev.github.io/metal-operator/concepts/).
+
 ## Prerequisites
 
 The current implementation of the baremetal automation in IronCore requires the following prerequisites:

@@ -1,4 +1,4 @@
-# IronCore Project Central Documentation
+# IronCore Project Landing Page and Central Documentation
 
 [![REUSE status](https://api.reuse.software/badge/github.com/ironcore-dev/ironcore-dev.github.io)](https://api.reuse.software/info/github.com/ironcore-dev/ironcore-dev.github.io)
 [![GitHub License](https://img.shields.io/static/v1?label=License&message=Apache-2.0&color=blue)](LICENSE)
