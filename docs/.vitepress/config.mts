@@ -132,6 +132,7 @@ export default withMermaid({
         text: "Kubernetes Integration",
         collapsed: false,
         items: [
+          { text: 'Overview', link: '/baremetal/kubernetes/' },
           { text: 'Cloud Controller Manager', link: '/baremetal/kubernetes/cloud-controller-manager' },
           { text: 'Metal Loadbalancer Controller', link: '/baremetal/kubernetes/metal-loadbalancer-controller' },
           { text: 'Cluster API Provider', link: '/baremetal/kubernetes/capi' },

@@ -1,4 +1,4 @@
-# Cloud Controller Manager
+# Cloud Controller Manager (Bare Metal)
 
 [Cloud-Controller-Manager](https://kubernetes.io/docs/concepts/architecture/cloud-controller) (CCM) is the bridge
 between Kubernetes and a cloud-provider. CCM uses the cloud-provider (IronCore Bare Metal API in this case) API to manage these

@@ -5,13 +5,13 @@ of IronCore.
 
 ## Provider Specific Integrations
 
-The typical provider specific integration points in Kubernetes are the following:
+The typical provider-specific integration points in Kubernetes are the following:
 
 - **CNI**: Container Network Interface, used for networking in Kubernetes.
 - **CSI**: Container Storage Interface, used for storage in Kubernetes.
 - **CRI**: Container Runtime Interface, used for container runtimes in Kubernetes.
 - **Loadbalancing**: Load balancing for services in Kubernetes.
-- **Other Infrastructure specific Integrations**: This includes any other provider specific integrations such as `Node` topology information.
+- **Other Infrastructure specific Integrations**: This includes any other provider-specific integrations such as `Node` topology information.
 
 As for CNI and CRI you can use almost any implementation that is compatible with Kubernetes.
 
