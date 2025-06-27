@@ -49,7 +49,7 @@ graph TD
         H --> |powers on/off| I(Server Instance)
     end
     subgraph boot-operator
-        D <--> |watches| E{{boot-operator}}
+        D <--> |watches| E{{ServerBootConfigurationReconciler}}
         E --> |creates/serves| F[iPXEBoot/HTTPBoot]
         E --> |creates/serves| G[Ignition]
     end
