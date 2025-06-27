@@ -16,14 +16,16 @@ The DHCP-based discovery process works as follows:
 
 ```mermaid
 graph TD
-    A[BMC Instance] -->|DHCP Request| B[FeDHCP]
-    B -->|creates| C[Endpoint]
-    C <-->|watches| D[EndpointReconciler]
-    D --> |lookup| E[MACAddress DB]
-    D -->|creates| F[BMC]
-    D -->|creates| G[BMCSecret]
-    F <-->|watches| H[BMCReconciler]
-    H -->|creates| J[Server]
+    subgraph metal-operator 
+       A[BMC Instance] -->|DHCP Request| B{{FeDHCP}}
+       B -->|creates| C[Endpoint]
+       C <-->|watches| D{{EndpointReconciler}}
+       D --> |lookup| E[(MACAddress DB)]
+       D -->|creates| F[BMC]
+       D -->|creates| G[BMCSecret]
+       F <-->|watches| H{{BMCReconciler}}
+       H -->|creates| J[Server]
+    end
 ```
 
 1. The BMC instance sends a DHCP request to the FeDHCP server.
@@ -117,12 +119,18 @@ That will cause the `ServerReconciler` to initialize the first boot process whic
 
 ```mermaid
 graph TD
-    A[Server] <-->|watches| B[ServerReconciler]
-    B --> |creates/watches| C[ServerBootConfiguration]
-    B --> |power on/off| J[Server Instance]
-    C <--> |watches| D[boot-operator]
-    D --> |creates/serves| E[iPXEBoot/HTTPBoot]
-    D --> |creates/serves| F[Ignition]
+    subgraph metal-operator
+       A[Server] <-->|watches| B{{ServerReconciler}}
+       B --> |creates/watches| C[ServerBootConfiguration]
+    end
+    subgraph physical world
+       B --> |power on/off| J(Server Instance)
+    end
+    subgraph boot-operator
+       C <--> |watches| D{{boot-operator}}
+       D --> |creates/serves| E[iPXEBoot/HTTPBoot]
+       D --> |creates/serves| F[Ignition]
+    end 
 ```
 
 1. The `ServerReconciler` creates for every `Server` resource which is in the `Initial` state a [`ServerBootConfiguration`](https://ironcore-dev.github.io/metal-operator/concepts/serverbootconfigurations.html).
