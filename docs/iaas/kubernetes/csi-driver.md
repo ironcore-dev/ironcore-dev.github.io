@@ -47,22 +47,18 @@ explanation of how the APIs are implemented in the IronCore CSI driver for diffe
 
 ### Volume Creation
 
-**CreateVolume**
-
-- CreateVolume method is called when a new PersistentVolumeClaim is created
+- `CreateVolume` method is called when a new `PersistentVolumeClaim` is created
 - Validates the storage class parameters and volume capabilities
-- Creates a new Volume object in IronCore with specified parameters
-- Sets up the volume with appropriate size, access mode, and other configurations
-- Returns a unique volume ID that will be used to identify the volume in subsequent operations
+- Create a new `Volume` object in IronCore with specified parameters
+- Set up the volume with the appropriate size, access mode, and other configurations
+- Returns a unique volume ID that will be used to identify the volume in later operations
 
 ### Volume Deletion
 
-**DeleteVolume**
-
-- DeleteVolume method is called when a PersistentVolume is deleted
-- Retrieves the volume using the volume ID
+- `DeleteVolume` method is called when a `PersistentVolume` is deleted
+- Retrieve the volume using the volume ID
 - Performs cleanup operations if necessary
-- Deletes the Volume object from IronCore
+- Delete the `Volum`e object from IronCore
 - Ensures all associated resources are properly cleaned up
 
 ## Node Operations
@@ -71,21 +67,17 @@ The CSI driver runs as a node plugin on each Kubernetes node to handle volume mo
 
 ### Volume Publishing
 
-**NodePublishVolume**
-
-- NodePublishVolume is called when a volume needs to be mounted on a node
+- `NodePublishVolume` is called when a volume needs to be mounted on a node
 - Validates the volume capabilities and access mode
-- Creates the necessary mount point on the node
+- Create the necessary mount point on the node
 - Mounts the volume using the appropriate filesystem
-- Sets up the required permissions and mount options
+- Set up the required permissions and mount options
 
 ### Volume Unpublishing
 
-**NodeUnpublishVolume**
-
-- NodeUnpublishVolume is called when a volume needs to be unmounted from a node
+- `NodeUnpublishVolume` is called when a volume needs to be unmounted from a node
 - Unmounts the volume from the specified mount point
-- Cleans up any temporary files or directories
+- Clean up any temporary files or directories
 - Ensures the volume is properly detached from the node
 
 ## Controller Operations
@@ -94,30 +86,24 @@ The CSI driver also runs as a controller plugin to manage volume provisioning an
 
 ### Volume Attachment
 
-**ControllerPublishVolume**
-
-- ControllerPublishVolume is called when a volume needs to be attached to a node
+- `ControllerPublishVolume` is called when a volume needs to be attached to a node
 - Validates the node information and volume capabilities
-- Attaches the volume to the specified node
+- Attaches the `Volume` to the specified node
 - Returns the device path that will be used for mounting
 
 ### Volume Detachment
 
-**ControllerUnpublishVolume**
-
-- ControllerUnpublishVolume is called when a volume needs to be detached from a node
+- `ControllerUnpublishVolume` is called when a volume needs to be detached from a node
 - Detaches the volume from the specified node
-- Performs any necessary cleanup operations
+- Perform any necessary cleanup operations
 - Ensures the volume is properly detached before returning
 
 ## Volume Expansion
 
 The CSI driver supports online volume expansion (if allowed by the `StorageClass`), allowing volumes to be resized without downtime.
 
-**ExpandVolume**
-
-- ExpandVolume is called when a volume needs to be resized
+- `ExpandVolume` is called when a volume needs to be resized
 - Validates the new size and volume capabilities
-- Resizes the volume in IronCore
-- Updates the filesystem if necessary
+- Resizes the `Volume` in IronCore
+- Update the filesystem if necessary
 - Returns the new size of the volume
