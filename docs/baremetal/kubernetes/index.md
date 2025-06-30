@@ -24,6 +24,13 @@ integration points of handling the `Node` lifecycle and topology information.
 
 Load balancing for `Services` of type `LoadBalancer` is done by the [metal-load-balancer-controller](/baremetal/kubernetes/metal-loadbalancer-controller).
 
+## Cluster API Provider
+
+The [Cluster API Provider for Bare Metal](https://github.com/ironcore-dev/cluster-api-provider-ironcore-metal) is
+a Kubernetes project that provides a declarative way to manage bare metal clusters using the Cluster API (CAPI) framework.
+
+More details on the Cluster API provider for bare metal can be found in the [Cluster API Provider](/baremetal/kubernetes/capi) section.
+
 ## Gardener Integration
 
 IronCore is also integrated with [Gardener](https://gardener.cloud/), a Kubernetes-native project for managing Kubernetes clusters at scale.
