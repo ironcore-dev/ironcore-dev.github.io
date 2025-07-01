@@ -125,7 +125,6 @@ export default withMermaid({
           { text: 'Overview', link: '/baremetal/architecture' },
           { text: 'Discovery', link: '/baremetal/architecture/discovery' },
           { text: 'Provisioning', link: '/baremetal/architecture/provisioning' },
-          { text: 'Maintenance', link: '/baremetal/architecture/maintenance' },
         ],
       },
       {
