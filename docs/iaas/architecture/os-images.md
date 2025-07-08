@@ -7,7 +7,7 @@ IronCore are used both for virtual machine creation in the [Infrastructure as a 
 as they represent a full operating system rather than just a single application or service.
 
 The core idea behind using OCI as a means to manage operating system images is to leverage any OCI compliant image registry,
-to publsish and share operating system images. This can be done by using a public registry or host your own private registry.
+to publish and share operating system images. This can be done by using a public registry or host your own private registry.
 
 ## OCI Image Format
 

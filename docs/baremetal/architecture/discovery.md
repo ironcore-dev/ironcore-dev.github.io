@@ -141,7 +141,7 @@ apiVersion: metal.ironcore.dev/v1alpha1
 kind: ServerBootConfiguration
 metadata:
   name: my-server-boot-config
-  namespace: defauilt
+  namespace: default
 spec:
   serverRef:
     name: my-server

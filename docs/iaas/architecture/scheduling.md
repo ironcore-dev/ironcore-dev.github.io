@@ -11,7 +11,7 @@ an entity onto which resources can be scheduled. The announcement of a `Pool` re
 also provides in the `Pool` status the `AvailableMachineClasses` a `Pool` supports. A `Class` in this context represents 
 a list of resource-specific capabilities that a `Pool` can provide, such as CPU, memory, and storage.
 
-`Pools` and `Classes` are defined for all major resource types in IronCore, including compute, storage. Resources in the 
+`Pools` and `Classes` are defined for all major resource types in IronCore, including compute and storage. Resources in the
 `networking` API have no `Pool` concept, as they are not scheduled but rather provided on-demand by the network related
 components. The details are described in the [networking section](/iaas/architecture/networking).
 
