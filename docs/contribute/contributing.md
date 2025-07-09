@@ -12,9 +12,6 @@ We welcome contributions from the community! Follow these guidelines to help us 
 - Feedback will be provided if any adjustments are necessary.
 
 Thank you for helping improve our documentation!
-# Contributing to IronCore Documentation
-
-We welcome contributions from the community! Follow these guidelines to help us maintain high-quality, consistent documentation.
 ## Contributors Guide
 
 The IronCore Documentation project uses Github to manage reviews of pull requests.
@@ -36,11 +33,11 @@ and us a good deal of inspiration.
 
 ## Steps to Contribute
 
-Do you want to work on an issue?  You are welcome to claim an existing one by commenting on it in GitHub. 
+Do you want to work on an issue? You are welcome to claim an existing one by commenting on it in GitHub. 
 
 !!! note
     Perform a cursory search to see if the issue has already been taken by someone else. 
-    This will prevent misunderstanding and duplication of  effort from contributors on the same issue.
+    This will prevent misunderstanding and duplication of effort from contributors on the same issue.
 
 If you have questions about one of the issues please comment on them and one of the 
 maintainers will clarify it.
@@ -67,14 +64,14 @@ process. We use [the standard DCO text of the Linux Foundation](https://develope
 
 * Fork and clone the repository to your local machine.
 
-```shell
-git clone git@github.com:ironcore-dev/ironcore-dev.github.io.git
-cd docs
-```
+    ```shell
+    git clone git@github.com:ironcore-dev/ironcore-dev.github.io.git
+    cd docs
+    ```
 
-* Create a branch from the `main`  using 'git checkout' command. 
+* Create a branch from the `main` using 'git checkout' command. 
 !!! note 
-    If needed, rebase to the current `main` branch before submitting  your pull request. If it doesn't merge properly
+    If needed, rebase to the current `main` branch before submitting your pull request. If it doesn't merge properly
     with `main` you may be asked to rebase your changes.
 
     ```shell
@@ -86,13 +83,13 @@ cd docs
 
 * Commits should be as small as possible, while ensuring that each commit is correct independently 
 
-*  Commit your changes to your feature branch and push it to your fork.
+* Commit your changes to your feature branch and push it to your fork.
 
-```shell
-git add .
-git commit -m "Something meaningful"
-git push origin my_feature
-```
+    ```shell
+    git add .
+    git commit -m "Something meaningful"
+    git push origin my_feature
+    ```
 
 !!! note
     Alternatively you can amend your commit before pushing if you forgot something by using `git commit --amend`
@@ -111,7 +108,7 @@ for a review in the pull request or a comment.
 
 ## Issues and Planning
 
-We use GitHub issues to track bugs and enhancement requests. Please provide as much context as possible when you open  an issue. The information you provide must be comprehensive enough to understand, reproduce the behavior and find related reports of  that issue for the assignee. 
+We use GitHub issues to track bugs and enhancement requests. Please provide as much context as possible when you open an issue. The information you provide must be comprehensive enough to understand, reproduce the behavior and find related reports of that issue for the assignee. 
 Therefore, contributors may use but aren't restricted to the issue template provided by the IronCore maintainers.
 
 

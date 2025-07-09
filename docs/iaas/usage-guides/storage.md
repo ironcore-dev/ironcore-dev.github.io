@@ -1,8 +1,9 @@
 # Storage Resources
+IronCore storage resources are `Volumes`, their associated `Volumeclasses` and `VolumePools` that allow you to define, provision, and manage Block devices in the Ironcore infrastructure. This guide explains the core storage resource types and how to use them.
 
 ## Volume
 
-The `Volume` resource is representing a block device in the IronCore API.  
+The `Volume` resource represents a block device in the IronCore API.
 
 ### Example Volume Resource
 
@@ -24,7 +25,7 @@ spec:
 
 ### Key Fields:
 
-- `volumeClassRef`(`string`): `volumeClassRef` refers to the name of an IronCore `volumeClass`( for eg: `slow`, `fast`, `super-fast` etc.) to create a volume,
+- `volumeClassRef` (`string`): `volumeClassRef` refers to the name of an IronCore `volumeClass`( for eg: `slow`, `fast`, `super-fast` etc.) to create a volume,
 - `volumePoolRef` (`string`): `VolumePoolRef` indicates which VolumePool to use for a volume. If unset, the scheduler will figure out a suitable `VolumePoolRef`.
 - `resources`: `Resources` is a description of the volume's resources and capacity.
 
@@ -48,8 +49,8 @@ capabilities:
 
 ### Key Fields:
 - `capabilities`: Capabilities has tps and iops fields that need to be specified, it's a mandatory field,
-    - `tps`(`string`): The `tps` represents transactions per second.
-    - `iops`(`string`): `iops` is the number of input/output operations a storage device can complete per second.
+    - `tps` (`string`): The `tps` represents transactions per second.
+    - `iops` (`string`): `iops` is the number of input/output operations a storage device can complete per second.
 
 ### Usage
 
@@ -76,7 +77,7 @@ spec:
 ```
 
 ### Key Fields:
-- `providerID`(`string`): The `providerId` helps the controller identify and communicate with the correct storage system within the specific backened storage porvider.
+- `providerID` (`string`): The `providerId` helps the controller identify and communicate with the correct storage system within the specific backened storage provider.
 
 ## Bucket
 
@@ -100,11 +101,11 @@ spec:
 ```
 
 ### Key Fields:
-- `bucketClassRef`(`string`):
+- `bucketClassRef` (`string`):
     - Mandatory field
     - `BucketClassRef` is the `BucketClass` of a bucket
 
-- `bucketPoolRef`(`string`):
+- `bucketPoolRef` (`string`):
     - Optional field
     - `bucketPoolRef` indicates which `BucketPool` to use for the `Bucket`, if not specified the controller itself picks the available `BucketPool`
 
@@ -137,8 +138,8 @@ capabilities:
 ### Key Fields:
 
 - `capabilities`: Capabilities has `tps` and `iops` fields which need to be specified, it's a mandatory field,
-    - `tps`(`string`): The `tps` represents transactions per second.
-    - `iops`(`string`):  `iops` is the number of input/output operations a storage device can complete per second.
+  - `tps` (`string`): The `tps` represents transactions per second.
+  - `iops` (`string`): `iops` is the number of input/output operations a storage device can complete per second.
 
 ### Usage
 
@@ -167,4 +168,4 @@ spec:
 
 ### Key Fields:
 
-- `ProviderID`(`string`):  The `providerId` helps the controller identify and communicate with the correct storage system within the specific backened storage porvider.
+- `ProviderID` (`string`): The `providerId` helps the controller identify and communicate with the correct storage system within the specific backened storage provider.

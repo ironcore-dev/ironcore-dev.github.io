@@ -27,10 +27,10 @@ Below is the detailed explanation on how APIs are implemented by `cloud-provider
 
 InstanceMetadata returns metadata of a node instance, which includes :
 
-- `ProviderID`:  Provider is combination of ProviderName(Which is nothing but set to `IronCore`)
-- `InstanceType`:  InstanceType is set to referencing MachineClass name by the instance.
+- `ProviderID`: Provider is combination of ProviderName(Which is nothing but set to `IronCore`)
+- `InstanceType`: InstanceType is set to referencing MachineClass name by the instance.
 - `NodeAddresses`: Node addresses are calculated from the IP information available from NetworkInterfaces of the machine.
-- `Zone`:  Zone is set to referenced MachinePool name.
+- `Zone`: Zone is set to referenced MachinePool name.
 
 
 ## Load balancing for Services of type LoadBalancer
@@ -47,7 +47,7 @@ explanation on how APIs are implemented in IronCore cloud-provider.
 ### Ensure LoadBalancer
 
 - `EnsureLoadBalancer` gets the LoadBalancer name based on service name.
-- Checks if IronCore `LoadBalancer` object already exists. If not it gets the `port` and `protocol`,  `ipFamily` information from the service and creates a new LoadBalancer object in the Ironcore. 
+- Checks if IronCore `LoadBalancer` object already exists. If not it gets the `port` and `protocol`, `ipFamily` information from the service and creates a new LoadBalancer object in the Ironcore. 
 - Newly created LoadBalancer will be associated with Network reference provided in cloud configuration.
 - Then `LoadBalancerRouting` object is created with the destination IP information retrieved from the nodes (Note: `LoadBalancerRouting` is internal object to Ironcore). Later, this information is used at the Ironcore API level to describe the explicit targets in a pool traffic is routed to.
 - Ironcore supports two types of LoadBalancer `Public` and `Internal`. If LoadBalancer has to be of type Internal, "service.beta.kubernetes.io/ironcore-load-balancer-internal" annotation needs to be set to true, otherwise it will be considered as public type.
