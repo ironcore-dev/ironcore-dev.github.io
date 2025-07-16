@@ -1,6 +1,6 @@
 # Server Provisioning
 
-This section describes how the provisioning of bare metal servers is handled in IronCore's baremetal automation. 
+This section describes how the provisioning of bare metal servers is handled in IronCore's bare metal automation. 
 In the [discovery section](/baremetal/architecture/discovery) we discussed how servers are discovered and first time
 booted and how they are transitioned into an `Available` state. Now we will focus on the provisioning process, and 
 one can use such a `Server` resource to provision a custom operating system and automate the software installation on

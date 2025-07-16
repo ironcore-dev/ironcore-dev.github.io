@@ -2,7 +2,7 @@
 
 ## Overview
 
-IronCore's virtual networking architecture provides an end-to-end virtual networking solution for provisioned `Machine`s running in data centers, regardless they are baremetal machines or virtual machines. It is designed to enable robust, flexible and performing networking control plane and data plane.
+IronCore's virtual networking architecture provides an end-to-end virtual networking solution for provisioned `Machine`s running in data centers, regardless they are bare metal machines or virtual machines. It is designed to enable robust, flexible and performing networking control plane and data plane.
 
 - **Robust**: IronCore's virtual networking control plane is mainly implemented using Kubernetes controller model. Thus, it is able to survive component's failure and recover the running states by retrieving the desired networking configuration.
 - **Flexible**: Thanks to the modular and layered architecture design, IronCore's virtual networking solution allows developers to implement and interchange components from the most top-level data center management system built upon defined IronCore APIs, to lowest-level packet processing engines depending on the used hardware.
@@ -14,12 +14,12 @@ IronCore's virtual networking architecture is illustrated with the following fig
 
 The main elements involved in IronCore's networking are:
 - [**ironcore**](https://github.com/ironcore-dev/ironcore): Core networking component that manages network resources and configurations. For more details, see the 
-  [Networking usage guide](/iaas/usage-guides/networking).
+[Networking usage guide](/iaas/usage-guides/networking).
 - [**ironcore-net**](https://github.com/ironcore-dev/ironcore-net): Global coordination service that manages network resource in an IronCore instance.
 - [**metalnet**](https://github.com/ironcore-dev/metalnet): A service that provides cluster-level networking capabilities for `Machines`.
 - [**dpservice**](https://github.com/ironcore-dev/dpservice): A service that manages data plane operations, including network traffic routing and policies.
 - [**metalbond**](https://github.com/ironcore-dev/metalbond): A component that handles route announcements in an IronCore instance, ensuring that networking routes are
-    correctly propagated across the IronCore installation.
+correctly propagated across the IronCore installation.
 
 ## `ironcore` and `ironcore-net`
 
@@ -27,10 +27,8 @@ The main elements involved in IronCore's networking are:
 the place where all network related decisions like reservation of unique IP addresses, allocation of unique network IDs, etc. are made.
 
 `ironcore-net` has apart from its [own API](https://github.com/ironcore-dev/ironcore-net/tree/main/api/core/v1alpha1) two main components:
-- **apinetlet**: This component is responsible from translating the user-facing API objects from the `networking` resource group into the 
-  internal representation used by `ironcore-net`. 
-- **metalnetlet**: This component is interfacing with the `metalnet` API to manage cluster-level networking resources like `NetworkInterface` which
-  are requested globally in the `ironcore-net` API but are implemented by `metalnet` on a hypervisor level.
+- **apinetlet**: This component is responsible from translating the user-facing API objects from the `networking` resource group into the internal representation used by `ironcore-net`. 
+- **metalnetlet**: This component is interfacing with the `metalnet` API to manage cluster-level networking resources like `NetworkInterface` which are requested globally in the `ironcore-net` API but are implemented by `metalnet` on a hypervisor level.
 
 ### Example `apinetlet` flow
 
@@ -50,10 +48,10 @@ The `apinetlet` will reconcile this `VirtualIP` by performing the following step
 1. Create an `IP` object in the `ironcore-net` API, which reserves a unique IP address.
 2. Update the `VirtualIP` status with the allocated IP address.
 
-The `ironcore` API server is agnostic on how the underlying global IP address is allocated and delegates this responsibility 
+The `IronCore` API server is agnostic on how the underlying global IP address is allocated and delegates this responsibility 
 to `ironcore-net`.
 
-A similar flow happens for `Networks`, `LoadBalancer` and `NatGateways` resources, where the `apinetlet` is responsible
+A similar flow happens for `Network`, `LoadBalancer` and `NatGateway` resources, where the `apinetlet` is responsible
 for translating and allocating the necessary resources in `ironcore-net` to ensure that the networking requirements are met.
 
 ### `metalnetlet` and `metalnet`
