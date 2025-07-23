@@ -8,7 +8,7 @@ management capabilities.
 
 ## IronCore CSI Driver Integration
 
-The [Ironcore CSI Driver](https://github.com/ironcore-dev/ironcore-csi-driver) is implemented as a Kubernetes storage 
+The [IronCore CSI Driver](https://github.com/ironcore-dev/ironcore-csi-driver) is implemented as a Kubernetes storage 
 plugin that bridges the gap between Kubernetes storage management and IronCore's `storage` resource types. 
 
 The core components of the IronCore CSI driver include:
@@ -20,8 +20,8 @@ The core components of the IronCore CSI driver include:
 
 The CSI driver supports various storage class parameters for customizing volume provisioning:
 
-- **Volume Type**: Specifies the type of volume to be created (e.g., standard, high-performance)
-- **AllowVolumeExpansion**: This Specifies the Volume can be resized if set to `true` and the respective volume Type has `ResizePolicy` set to `ExpandOnly` 
+- **Volume Type**: Specifies the type of volume to be created (e.g., standard, high-performance).
+- **AllowVolumeExpansion**: This specifies that the `Volume` can be resized if set to `true` and the respective volume Type has `ResizePolicy` set to `ExpandOnly`. 
 
 ### Volume Management
 

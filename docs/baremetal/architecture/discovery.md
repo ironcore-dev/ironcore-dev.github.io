@@ -1,6 +1,6 @@
 # Server Discovery and First Boot
 
-This document describes the discovery and first boot process for bare metal servers in IronCore's baremetal automation.
+This document describes the discovery and first boot process for bare metal servers in IronCore's bare metal automation.
 The goal here is to provide a clear understanding of how bare metal servers are discovered and prepared for provisioning.
 
 ## Server Discovery 

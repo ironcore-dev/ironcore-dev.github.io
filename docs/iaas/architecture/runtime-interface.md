@@ -1,6 +1,6 @@
 # IronCore Runtime Interface (IRI)
 
-The IronCore Runtime Interface (IRI) is a key concept in the IronCore architecture, designed to provide a consitent
+The IronCore Runtime Interface (IRI) is a key concept in the IronCore architecture, designed to provide a consistent
 and unified interface for interacting with various compute and storage providers. The IRI abstracts the underlying 
 complexities of different providers.
 
@@ -12,7 +12,7 @@ There are three main runtime interfaces in IronCore:
 Implementations of these interfaces are done by provider-specific components. More infomation about the provider can
 be found in the [provider concept documentation](/iaas/architecture/providers/).
 
-The definition of the runtime interfaces can be found in IronCores [`iri` package](https://github.com/ironcore-dev/ironcore/tree/main/iri/).
+The definition of the runtime interfaces can be found in IronCore's [`iri` package](https://github.com/ironcore-dev/ironcore/tree/main/iri/).
 
 ## MachineRuntime Interface
 
@@ -40,9 +40,7 @@ service MachineRuntime {
 }
 ```
 
-The general idea is that a `machinepoollet` ensures that the API level dependencies are met. For example, a `Machine`s 
-`Volume` which is used as a root disk is in the state `Available`. If those prerequisites are met, the `poollet` will 
-call the corresponding `CreateMachine` method of the `RuntimeInterface` to create the `Machine` resource.
+The general idea is that a `machinepoollet` ensures that the API level dependencies are met. For example, a `Machine`'s `Volume` which is used as a root disk is in the state `Available`. If those prerequisites are met, the `poollet` will call the corresponding `CreateMachine` method of the `RuntimeInterface` to create the `Machine` resource.
 
 The `ListMachines` and `Status` methods are used to retrieve a list of all `Machine` instances managed by the provider. 
 The result of those methods is then used to propagate `Machine` state changes. Those methods are periodically called by 
@@ -53,7 +51,7 @@ methods to attach volumes or network interfaces to a `Machine` if a change in th
 
 ## VolumeRuntime Interface
 
-Similar to the `MachineRuntime`, the `VolumeRuntime` interface is responsible for managing storage resources in IronCore.
+Similar to the `MachineRuntime`, the `VolumeRuntime` interface is responsible for managing block storage resources in IronCore.
 Here the `volumepoollet` takes a similar role as the `machinepoollet` for the `MachineRuntime` and invokes `CreateVolume`,
 `DeleteVolume`, `ExpandVolume`, and other methods to manage `Volume` resources.
 
