@@ -1,4 +1,5 @@
 import { withMermaid } from "vitepress-plugin-mermaid";
+import { fileURLToPath, URL } from 'node:url'
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid({
@@ -6,6 +7,18 @@ export default withMermaid({
   description: "Welcome to IronCore Documentation",
   base: '/',
   head: [['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg' }]],
+  vite: {
+    resolve: {
+      alias: [
+        {
+          find: /^.*\/VPFooter\.vue$/,
+          replacement: fileURLToPath(
+              new URL('./theme/components/VPFooter.vue', import.meta.url)
+          )
+        },
+      ]
+    }
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -21,14 +34,6 @@ export default withMermaid({
     editLink: {
       pattern: 'https://github.com/ironcore-dev/ironcore-dev.github.io/blob/main/docs/:path',
       text: 'Edit this page on GitHub'
-    },
-
-    footer: {
-      copyright: 'Copyright © Linux Foundation Europe. IronCore is a project of NeoNephos Foundation. For applicable ' +
-          'policies including privacy policy, terms of use and trademark usage guidelines, please see ' +
-          'https://linuxfoundation.eu. Linux is a registered trademark of Linus Torvalds.' +
-          '<br><br>' +
-          '<img src="https://raw.githubusercontent.com/ironcore-dev/ironcore-dev.github.io/refs/heads/main/docs/public/bmwe.png" style="max-width: 340px; display: block; margin-right: auto; margin-left: auto;">'
     },
 
     logo: {
