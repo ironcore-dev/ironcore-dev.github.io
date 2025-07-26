@@ -20,13 +20,14 @@ The fastest way to get started with IronCore IaaS is to run it locally inside a 
 - make 
 - go
 - docker
+- kind
 
 ### Installation
 
 To do that clone the `ironcore-in-a-box` repository and run the provided script:
 
 ```bash
-git clone github.com/ironcore-dev/ironcore-in-a-box.git
+git clone https://github.com/ironcore-dev/ironcore-in-a-box.git
 ```
 
 To start the IronCore stack you simply run:
