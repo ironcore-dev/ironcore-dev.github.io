@@ -20,6 +20,7 @@ The fastest way to get started with IronCore IaaS is to run it locally inside a 
 - make 
 - go
 - docker
+- kind
 
 ### Installation
 
