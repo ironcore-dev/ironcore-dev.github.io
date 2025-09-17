@@ -48,7 +48,7 @@ supports the defined `MachineClass` or `VolumeClass`. If a suitable `Pool` is fo
 or `.spec.volumePoolRef` field of the `Machine` or `Volume` resource to the name of the `Pool`. This reference indicates
 the `poollet` responsible for the announced `Pool` that something needs to be done, such as creating a `Machine` or `Volume` resource.
 
-The currrent schedule implementation works on a best-effort basis, meaning that it will try to find a suitable `Pool` and
+The current schedule implementation works on a best-effort basis, meaning that it will try to find a suitable `Pool` and
 assign the correct `Pool` but it does not guarantee that the `Machine` or `Volume` will be created. A new `Reservation` 
 based scheduling mechanism which is described in this [enhancement proposal](https://github.com/ironcore-dev/ironcore/blob/main/docs/proposals/11-scheduling.md)
 should provide a more robust scheduling mechanism in the future.
@@ -69,7 +69,7 @@ The `poollets` responsibilities besides announcing the `Pool` are manifold and a
 The key role in managing the resources is defined in the [IronCore Runtime Interface (IRI)](/iaas/architecture/runtime-interface), 
 which provides a well-defined gRPC interface for each resource group. 
 
-This architecture with resoruces scheduled on `Pools` and `poollets` acting as the resource managers by invoking a backend
+This architecture with resources scheduled on `Pools` and `poollets` acting as the resource managers by invoking a backend
 interface API corresponds to the same model Kubernetes is using with Kubelet announcing `Nodes` and `Pods` being scheduled
 on `Nodes`. The Kubelet here interact via the Container Runtime Interface (CRI) with the container runtime, to manifest 
 the actual instance of a `Pod`.
