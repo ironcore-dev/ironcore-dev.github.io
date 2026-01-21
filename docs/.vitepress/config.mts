@@ -157,7 +157,14 @@ export default withMermaid({
     ]},
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/ironcore-dev/' }
+      {
+        icon: 'github',
+        link: 'https://github.com/ironcore-dev',
+      },
+      {
+        icon: 'slack',
+        link: 'https://join.slack.com/t/ironcore-dev/shared_invite/zt-3o0qo3j90-pbqV0io1B~Z~LqeAp4n2Vg'
+      },
     ],
   }
 })
