@@ -28,6 +28,7 @@ export default withMermaid({
       items: [
         {text: 'Infrastructure as a Service', link: '/iaas/getting-started'},
         {text: 'Bare Metal Automation', link: '/baremetal/'},
+        {text: 'Network Automation', link: '/network-automation/'},
       ]},
     ],
 
@@ -154,8 +155,13 @@ export default withMermaid({
           { text: 'boot-operator', link: '/baremetal/api-references/boot-operator' },
         ],
       },
-    ]},
-
+    ],
+    '/network-automation/': [
+      {
+        text: 'Overview', link: '/network-automation/',
+      },
+    ],
+    },
     socialLinks: [
       {
         icon: 'github',
