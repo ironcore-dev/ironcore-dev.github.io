@@ -4,7 +4,7 @@ IronCore storage resources are
 
 - `Buckets`, their associated `Bucketclasses` and `BucketPools`, that allow you to define, provision, and manage the object storage such as files or data blobs.
 
-- `VolumeSnapshots`, that allow users to take a point-in-time snapshot of an IronCore `Volume` content. It can be used to restore the data in case of data loss or to migrate the data to a different cluster or storage system. Also an Ironcore `Volume` can be provisioned by referencing a `VolumeSnapshot`.
+- `VolumeSnapshots`, that allow users to take a point-in-time snapshot of an IronCore `Volume` content. It can be used to restore the data in case of data loss or to migrate the data to a different cluster or storage system. Also an IronCore `Volume` can be provisioned by referencing a `VolumeSnapshot`.
 
 This guide explains the core storage resource types and how to use them.
 
