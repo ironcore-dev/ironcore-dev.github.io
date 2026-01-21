@@ -1,5 +1,12 @@
 # Storage Resources
-IronCore storage resources are `Volumes`, their associated `Volumeclasses` and `VolumePools` that allow you to define, provision, and manage Block devices in the Ironcore infrastructure. This guide explains the core storage resource types and how to use them.
+IronCore storage resources are
+- `Volumes`, their associated `Volumeclasses` and `VolumePools` that allow you to define, provision, and manage Block devices in the IronCore infrastructure.
+
+- `Buckets`, their associated `Bucketclasses` and `BucketPools`, that allow you to define, provision, and manage the object storage such as files or data blobs.
+
+- `VolumeSnapshots`, that allow users to take a point-in-time snapshot of an IronCore `Volume` content. It can be used to restore the data in case of data loss or to migrate the data to a different cluster or storage system. Also an IronCore `Volume` can be provisioned by referencing a `VolumeSnapshot`.
+
+This guide explains the core storage resource types and how to use them.
 
 ## Volume
 
@@ -59,7 +66,7 @@ capabilities:
 
 ## VolumePool
 
-A `VolumePool` is a resource in `Ironcore` that represents a pool of storage volume managed collectively. It defines 
+A `VolumePool` is a resource in IronCore that represents a pool of storage volume managed collectively. It defines 
 the infrastructure's storage configuration used to provision and manage volumes, ensuring resource availability and 
 compatibility with associated `VolumeClasses`.
 
@@ -119,7 +126,7 @@ spec:
 
 A `BucketClass` is a concept used to define and manage different types of storage buckets, typically based on resource 
 capabilities. It is conceptually similar to Kubernetes `StorageClass`, enabling users to specify the desired properties 
-for an Ironcore `Bucket` resource creation.
+for an IronCore `Bucket` resource creation.
 
 ### Example BucketClass Resource
 
@@ -149,7 +156,7 @@ capabilities:
 
 ## BucketPool
 
-A `BucketPool` is a resource in `Ironcore` that represents a pool of storage buckets managed collectively. It defines
+A `BucketPool` is a resource in IronCore that represents a pool of storage buckets managed collectively. It defines
 the infrastructure's storage configuration used to provision and manage buckets, ensuring resource availability and 
 compatibility with associated `BucketClasses`.
 
@@ -169,3 +176,25 @@ spec:
 ### Key Fields:
 
 - `ProviderID` (`string`): The `providerId` helps the controller identify and communicate with the correct storage system within the specific backened storage provider.
+
+## VolumeSnapshot
+
+The IronCore `VolumeSnapshot` resource allows users to take point-in-time snapshots of the content of a `Volume` without creating an entirely new volume. This functionality allows users to take backup before performing any modifications on data.
+
+### Example VolumeSnapshot Resource
+
+An example of how to define a `VolumeSnapshot` resource in IronCore:
+
+```yaml
+apiVersion: storage.ironcore.dev/v1alpha1
+kind: VolumeSnapshot
+metadata:
+  name: volumesnapshot-sample
+spec:
+  volumeRef:
+    name: volume-sample
+```
+
+### Key Fields:
+
+- `volumeRef` (`string`): `volumeRef` refers to the name of an IronCore `volume` to create a volumeSnapshot.

@@ -39,7 +39,7 @@ The format of a network providerID is as follows:
     - The `binding` phase of a `spec.peerings` item is reflected in a corresponding `status.peerings` item with the same name. The phase can either be `Pending`, meaning there is no active peering or `Bound` meaning the peering as described in the `spec.peerings` item is in place.
 
 
-After successful reconciliation, the Ironcore `Network` resource gets updated with `providerID`, `incomingpeerings` and `status`.
+After successful reconciliation, the IronCore `Network` resource gets updated with `providerID`, `incomingpeerings` and `status`.
 
 ```yaml
 apiVersion: networking.ironcore.dev/v1alpha1
