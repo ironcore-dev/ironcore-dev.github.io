@@ -1,9 +1,9 @@
 # Overview
 
-The bare metal automation architecture is described in the diagram below. It consists of two main concepts: out-of-band 
+The bare metal management architecture is described in the diagram below. It consists of two main concepts: out-of-band 
 server management and in-band server boot automation.
 
-![Bare Metal Automation Architecture](/metal-automation-overview.png)
+![Bare Metal Management Architecture](/metal-management-overview.png)
 
 ## Out-of-Band Automation
 

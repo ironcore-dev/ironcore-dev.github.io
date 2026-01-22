@@ -1,6 +1,6 @@
-# Baremetal Automation
+# Bare Metal Management
 
-The bare metal automation in IronCore is designed to provide a comprehensive solution for managing physical servers
+The bare metal management and automation in IronCore is designed to provide a comprehensive solution for managing physical servers
 in a Kubernetes-native way. It leverages the power of Kubernetes Custom Resource Definitions (CRDs) to automate:
 
 - **Discovery**: Automatically detect and register bare metal servers.
@@ -11,7 +11,7 @@ in a Kubernetes-native way. It leverages the power of Kubernetes Custom Resource
 
 ## Core Components
 
-The core components of the bare metal automation in IronCore include:
+The core components of the bare metal management in IronCore include:
 - [**Metal Operator**](https://github.com/ironcore-dev/metal-operator): The central component that manages the lifecycle of bare metal servers.
 - [**Boot Operator**](https://github.com/ironcore-dev/boot-operator): iPXE and HTTP boot server that provides boot images and Ignition configurations.
 - [**FeDHCP**](https://github.com/ironcore-dev/fedhcp): A DHCP server that provides in-band and out-of-band network configuration to bare metal servers.
@@ -22,7 +22,7 @@ Usage guides and concepts for the `metal-operator` API types can be found in the
 
 ## Prerequisites
 
-The current implementation of the bare metal automation in IronCore requires the following prerequisites:
+The current implementation of the bare metal management in IronCore requires the following prerequisites:
 
 - In-band and out-of-band network connectivity to the bare metal servers.
 - A management server in the out-of-band network that can communicate with the bare metal servers.

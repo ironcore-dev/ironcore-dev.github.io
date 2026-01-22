@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: "IronCore Project"
-  text: "Cloud Native Infrastructure as a Service and Bare Metal Automation"
-  tagline: "IronCore is an open-source platform designed to empower users with robust infrastructure management and bare metal automation"
+  text: "Cloud Native Infrastructure Management"
+  tagline: "IronCore is an Open-Source platform designed to empower users by providing a robust Infrastructure as a Service layer, Bare Metal Management and Network Automation"
   image:
     src: https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg
     alt: IronCore
@@ -17,8 +17,11 @@ hero:
       text: Infrastructure as a Service
       link: /iaas/getting-started
     - theme: alt
-      text: Bare Metal Automation
+      text: Bare Metal Management
       link: /baremetal/
+    - theme: alt
+      text: Network Automation
+      link: /network-automation/
 
 features:
   - title: 🔍 Automatic Discovery & Provisioning
