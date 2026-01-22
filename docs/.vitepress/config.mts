@@ -6,7 +6,16 @@ export default withMermaid({
   title: "IronCore Project",
   description: "Welcome to IronCore Documentation",
   base: '/',
-  head: [['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg' }]],
+  head: [
+      ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg' }],
+      ['meta', {property: 'og:type', content: 'website'}],
+      ['meta', {property: 'og:site_name', content: 'IronCore Project'}],
+      ['meta', {
+          property: 'og:image',
+          content: 'https://raw.githubusercontent.com/ironcore-dev/ironcore-dev.github.io/refs/heads/main/docs/public/og-ironcore.png'
+        }],
+      ['meta', {property: 'og:url', content: 'https://ironcore.dev/'}],
+  ],
   vite: {
     resolve: {
       alias: [
