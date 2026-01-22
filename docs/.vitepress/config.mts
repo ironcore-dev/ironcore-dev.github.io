@@ -9,6 +9,7 @@ export default withMermaid({
   head: [
       ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg' }],
       ['meta', {property: 'og:type', content: 'website'}],
+      ['meta', {property: 'og:title', content: 'IronCore Project - Cloud Native Infrastructure Management'}],
       ['meta', {property: 'og:site_name', content: 'IronCore Project'}],
       ['meta', {
           property: 'og:image',
