@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vitepress.dev/reference/site-config
 export default withMermaid({
   title: "IronCore Project",
-  description: "Welcome to IronCore Documentation",
+  description: "IronCore Project - Cloud Native Infrastructure Management",
   base: '/',
   head: [
       ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg' }],
