@@ -3,7 +3,7 @@
 IronCore uses Open Container Initiative (OCI) images as the standard format for operating system images. This allows 
 for a consistent and portable way to manage and deploy operating systems across different environments. OCI images in
 IronCore are used both for virtual machine creation in the [Infrastructure as a Service](/iaas/getting-started) and in the
-[Bare Metal Automation](/baremetal/) layers. IronCore OCI images should not be confused with container images,
+[Bare Metal Management](/baremetal/) layers. IronCore OCI images should not be confused with container images,
 as they represent a full operating system rather than just a single application or service.
 
 The core idea behind using OCI as a means to manage operating system images is to leverage any OCI compliant image registry,
