@@ -33,7 +33,7 @@ avoids unnecessary work and helps align your contribution with the project's dir
 
 ## Making a Contribution
 
-### 1. Fork and Clone
+### Fork and Clone
 
 Fork the repository you want to contribute to and clone it locally:
 
@@ -42,7 +42,7 @@ git clone git@github.com:<your-username>/<repository>.git
 cd <repository>
 ```
 
-### 2. Create a Branch
+### Create a Branch
 
 Create a feature branch from `main`:
 
@@ -57,7 +57,7 @@ git fetch upstream main
 git rebase upstream/main
 ```
 
-### 3. Make Your Changes
+### Make Your Changes
 
 - Follow the [coding](/community/style-guide/coding) and [documentation](/community/style-guide/documentation) style guides for code, testing, and documentation standards.
 - Keep commits small and focused — each commit should be correct independently.
@@ -69,7 +69,7 @@ git rebase upstream/main
 git commit -s -m "Add support for feature X"
 ```
 
-### 4. Submit a Pull Request
+### Submit a Pull Request
 
 Push your branch and open a pull request against `main`:
 
@@ -82,7 +82,7 @@ In your pull request description:
 - Reference any related issues (e.g., `Fixes #123`).
 - Tag a relevant maintainer if you need a specific reviewer — check the `CODEOWNERS` file in the repository.
 
-### 5. Run Checks
+### Run Checks
 
 Before submitting, run the project's checks locally to catch issues early. See
 [Running tests](/community/style-guide/coding#running-tests) in the coding style guide for details:

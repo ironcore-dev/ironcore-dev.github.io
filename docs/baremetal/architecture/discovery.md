@@ -44,7 +44,7 @@ spec:
 ```
 
 3. The `EndpointReconciler` watches for changes to the `Endpoint` and looks up the MAC address in the [MACAddress database](https://ironcore-dev.github.io/metal-operator/concepts/endpoints.html#configuration)
-to find a matching MAC address prefix end derive from that the initial credentials, protocol, and other information needed to create a BMC resource.
+to find a matching MAC address prefix and derive from that the initial credentials, protocol, and other information needed to create a BMC resource.
 4. If a MAC address prefix is found in the database, the `EndpointReconciler` creates a `BMC` and `BMCSecret` resource.
 
 Here is an example of a `BMC` resource:

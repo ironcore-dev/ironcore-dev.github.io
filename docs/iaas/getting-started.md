@@ -1,10 +1,10 @@
-# Getting started with Infrastructure as a Service
+# Getting Started with Infrastructure as a Service
 
 This section provides a comprehensive guide to getting started with IronCore's Infrastructure as a Service (IaaS) layer. 
 It covers the prerequisites, local setup, and how to create and manage resources such as virtual machines, storage, 
 and networking.
 
-Before you are using IronCore IaaS, please make yourself familiar with the core concepts of IronCore as described in the
+Before you use IronCore IaaS, make yourself familiar with the core concepts of IronCore as described in the
 [architecture overview section](/iaas/architecture/).
 
 ## Local Setup
@@ -25,13 +25,13 @@ The fastest way to get started with IronCore IaaS is to run it locally inside a 
 
 To do that clone the `ironcore-in-a-box` repository and run the provided script:
 
-```bash
+```shell
 git clone https://github.com/ironcore-dev/ironcore-in-a-box.git
 ```
 
 To start the IronCore stack you simply run:
 
-```bash
+```shell
 make up
 ```
 
@@ -43,10 +43,10 @@ for more details on how to run the stack on macOS or Windows.
 
 ### Usage
 
-Once all IronCore components are up and running, you can start using the IaaS layer. `ironcore-in-a-box` provides a 
-conclusive example on how to create a `Machine` and all necessary resources to run a virtual machine [here](https://github.com/ironcore-dev/ironcore-in-a-box/blob/main/examples/machine/machine.yaml).
+Once all IronCore components are up and running, you can start using the IaaS layer. The `ironcore-in-a-box` project provides a
+comprehensive example on how to create a Machine and all necessary resources to run a virtual machine [here](https://github.com/ironcore-dev/ironcore-in-a-box/blob/main/examples/machine/machine.yaml).
 
-```bash
+```shell
 kubectl apply -f https://raw.githubusercontent.com/ironcore-dev/ironcore-in-a-box/refs/heads/main/examples/machine/machine.yaml
 ```
 

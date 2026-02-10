@@ -9,7 +9,7 @@ There are three main runtime interfaces in IronCore:
 - `VolumeRuntime`: This interface is used for managing storage resources, such as block storage.
 - `BucketRuntime`: This interface is used for managing object storage, such as S3-compatible buckets.
 
-Implementations of these interfaces are done by provider-specific components. More infomation about the provider can
+Implementations of these interfaces are done by provider-specific components. More information about the provider can
 be found in the [provider concept documentation](/iaas/architecture/providers/).
 
 The definition of the runtime interfaces can be found in IronCore's [`iri` package](https://github.com/ironcore-dev/ironcore/tree/main/iri/).
@@ -53,7 +53,7 @@ methods to attach volumes or network interfaces to a `Machine` if a change in th
 
 Similar to the `MachineRuntime`, the `VolumeRuntime` interface is responsible for managing block storage resources in IronCore.
 Here the `volumepoollet` takes a similar role as the `machinepoollet` for the `MachineRuntime` and invokes `CreateVolume`,
-`DeleteVolume`, `ExpandVolume`, and other methods to manage `Volume` resources.
+the `DeleteVolume`, `ExpandVolume`, and other methods to manage Volume resources.
 
 ```proto
 service VolumeRuntime {

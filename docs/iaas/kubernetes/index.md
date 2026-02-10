@@ -15,7 +15,7 @@ The typical provider-specific integration points in Kubernetes are the following
 
 As for CNI and CRI you can use almost any implementation that is compatible with Kubernetes.
 
-For CSI, IronCore provider an own implementation of the [CSI interface](/iaas/kubernetes/csi-driver).
+For CSI, IronCore provides its own implementation of the [CSI interface](/iaas/kubernetes/csi-driver).
 
 Additionally, the IronCore [Cloud Controller Manager](/iaas/kubernetes/cloud-controller-manager) provides the necessary
 integration points of handling Loadbalancing and other provider specific integrations like the `Node` lifecycle and topology information.
