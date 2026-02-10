@@ -1,10 +1,10 @@
 # Storage Resources
-IronCore storage resources are
-- `Volumes`, their associated `Volumeclasses` and `VolumePools` that allow you to define, provision, and manage Block devices in the IronCore infrastructure.
+IronCore storage resources are:
+- Volumes, their associated VolumeClasses, and VolumePools that allow you to define, provision, and manage block devices in the IronCore infrastructure.
 
-- `Buckets`, their associated `Bucketclasses` and `BucketPools`, that allow you to define, provision, and manage the object storage such as files or data blobs.
+- Buckets, their associated BucketClasses, and BucketPools that allow you to define, provision, and manage object storage such as files or data blobs.
 
-- `VolumeSnapshots`, that allow users to take a point-in-time snapshot of an IronCore `Volume` content. It can be used to restore the data in case of data loss or to migrate the data to a different cluster or storage system. Also an IronCore `Volume` can be provisioned by referencing a `VolumeSnapshot`.
+- VolumeSnapshots that allow you to take a point-in-time snapshot of a Volume's content. You can use them to restore data in case of data loss or to migrate data to a different cluster or storage system. You can also provision a Volume by referencing a VolumeSnapshot.
 
 This guide explains the core storage resource types and how to use them.
 
@@ -84,7 +84,7 @@ spec:
 ```
 
 ### Key Fields:
-- `providerID` (`string`): The `providerId` helps the controller identify and communicate with the correct storage system within the specific backened storage provider.
+- `providerID` (`string`): The `providerId` helps the controller identify and communicate with the correct storage system within the specific backend storage provider.
 
 ## Bucket
 
@@ -175,7 +175,7 @@ spec:
 
 ### Key Fields:
 
-- `ProviderID` (`string`): The `providerId` helps the controller identify and communicate with the correct storage system within the specific backened storage provider.
+- `ProviderID` (`string`): The `providerId` helps the controller identify and communicate with the correct storage system within the specific backend storage provider.
 
 ## VolumeSnapshot
 
@@ -197,4 +197,4 @@ spec:
 
 ### Key Fields:
 
-- `volumeRef` (`string`): `volumeRef` refers to the name of an IronCore `volume` to create a volumeSnapshot.
+- `volumeRef` (`string`): `volumeRef` refers to the name of an IronCore Volume to create a VolumeSnapshot.

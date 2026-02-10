@@ -18,7 +18,8 @@ The core components of the bare metal management in IronCore include:
 
 ## Concepts and Usage Guides
 
-Usage guides and concepts for the `metal-operator` API types can be found in the [metal-operator documentation](https://ironcore-dev.github.io/metal-operator/concepts/).
+Usage guides and concepts for the `metal-operator` API types can be found in the [metal-operator documentation](https://ironcore-dev.github.io/metal-operator/concepts).
+
 
 ## Prerequisites
 

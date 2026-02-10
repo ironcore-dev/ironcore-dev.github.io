@@ -7,4 +7,4 @@ This guide provides operational instructions for system operators, covering depl
 - Routine maintenance tasks
 - Monitoring & alerts
 
-For more detailed troubleshooting information, refer to the [Troubleshooting](../troubleshooting/index.md) section.
+For more detailed troubleshooting information, refer to the [Troubleshooting](/baremetal/troubleshooting/) section.

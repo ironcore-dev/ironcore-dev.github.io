@@ -7,4 +7,4 @@ operations. Those guides are intended to give the user a comprehensive understan
 More examples and detailed usage can be found in the [end to end examples](https://github.com/ironcore-dev/ironcore/tree/main/config/samples/e2e)
 in the `ironcore` repository.
 
-Detailed API references for the IronCore IaaS types can be found in the [API References](../api-references/) section.
+Detailed API references for the IronCore IaaS types can be found in the [API References](/iaas/api-references/) section.

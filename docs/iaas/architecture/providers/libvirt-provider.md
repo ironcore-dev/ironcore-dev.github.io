@@ -1,6 +1,6 @@
 # `libvirt-provider`
 
-The [`libvirt-proivder`](https://github.com/ironcore-dev/libvirt-provider) implements the 
+The [`libvirt-provider`](https://github.com/ironcore-dev/libvirt-provider) implements the 
 [`MachineRuntime` interface](/iaas/architecture/runtime-interface#machineruntime-interface). It interfaces directly
 with the `libvirt` daemon running on a hypervisor host to manage virtual machine instances.
 
@@ -9,7 +9,7 @@ IronCore `compute` resource group into a `domain.xml` representing the virtual m
 
 ## Overview
 
-The relationship beween the `machinepoollet` and the `libvirt-provider` is illustrated in the graph below:
+The relationship between the `machinepoollet` and the `libvirt-provider` is illustrated in the graph below:
 
 ```mermaid
 graph TD
@@ -25,7 +25,7 @@ graph TD
     C -- defines --> VC[Supported MachineClasses]
 ```
 
-Here the `machinepoollet` announces it's `MachinePool` and watches `Machines` scheduled on this pool as described in the
+Here the `machinepoollet` announces its MachinePool and watches Machines scheduled on this pool as described in the
 [Scheduling and Orchestration Section](/iaas/architecture/scheduling).
 
 The `libvirt-provider` is then invoked by the `machinepoollet` via the `MachineRuntime` interface method the `libvirt-provider`

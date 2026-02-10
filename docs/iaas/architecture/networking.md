@@ -23,11 +23,11 @@ correctly propagated across the IronCore installation.
 
 ## `ironcore` and `ironcore-net`
 
-`ironcore-net` is a global coordination service within an IronCore installation. Therefore, it is a single instance and 
-the place where all network related decisions like reservation of unique IP addresses, allocation of unique network IDs, etc. are made.
+The `ironcore-net` service is a global coordination service within an IronCore installation. Therefore, it is a single instance and
+the place where all network-related decisions like reservation of unique IP addresses, allocation of unique network IDs, etc. are made.
 
-`ironcore-net` has apart from its [own API](https://github.com/ironcore-dev/ironcore-net/tree/main/api/core/v1alpha1) two main components:
-- **apinetlet**: This component is responsible from translating the user-facing API objects from the `networking` resource group into the internal representation used by `ironcore-net`. 
+The `ironcore-net` service has, apart from its [own API](https://github.com/ironcore-dev/ironcore-net/tree/main/api/core/v1alpha1), two main components:
+- **apinetlet**: This component is responsible for translating the user-facing API objects from the `networking` resource group into the internal representation used by `ironcore-net`. 
 - **metalnetlet**: This component is interfacing with the `metalnet` API to manage cluster-level networking resources like `NetworkInterface` which are requested globally in the `ironcore-net` API but are implemented by `metalnet` on a hypervisor level.
 
 ### Example `apinetlet` flow
@@ -56,9 +56,9 @@ for translating and allocating the necessary resources in `ironcore-net` to ensu
 
 ### `metalnetlet` and `metalnet`
 
-`metalnetlet` and `metalnet` work together to provide the necessary networking capabilities for `Machines` in an IronCore on 
+The `metalnetlet` and `metalnet` components work together to provide the necessary networking capabilities for Machines in an IronCore instance on
 a hypervisor host. In a compute cluster, the `metalnetlet` will create for each `Node` in the cluster a corresponding
-`Node` object in the `ironcore-net` API. This `Node` object represents the hypervisor host and is used to manage the networking resources
+Node object in the `ironcore-net` API. This Node object represents the hypervisor host and is used to manage the networking resources
 which should be available on this host.
 
 The image below illustrates the relationship between `metalnetlet` and `metalnet`:
@@ -68,7 +68,7 @@ The image below illustrates the relationship between `metalnetlet` and `metalnet
 The `NetworkInterface` creation flow will look like this:
 1. A provider (in this case `libvirt-provider`) will create a virtual machine against the libvirt daemon on a hypervisor host.
 In case a `NetworkInterface` should be attached to this virtual machine, the `machinepoollet` will call the corresponding
-`AttachNetworkInterface` method on the [`MachineRuntime`](/iaas/architecture/runtime-interface#machineruntime-interface) 
+`AttachNetworkInterface` method on the [`MachineRuntime`](/iaas/architecture/runtime-interface#machineruntime-interface)
 interface implemented by the `libvirt-provider`. The `libvirt-provider` itself then has a plugin into the `ironcore-net` 
 API to create a `NetworkInterface` resource in the `ironcore-net` API.
 2. The `metalnetlet` will then watch for changes to the `NetworkInterface` resource and create the corresponding `NetworkInterface` 
@@ -78,10 +78,10 @@ virtual network interface back to the `ironcore-net` API by updating the status 
 4. The `libvirt-provider` will poll the `ironcore-net` API to get the updated status of the `NetworkInterface` and will 
 use the PCI address in the status to attach the virtual network interface to the virtual machine instance.
 
-`LoadBalancer` and `NATGateways` resources follow a similar flow. Here, however, the compute provider is not involved. 
-The `apinetlet` will translate the `ironcore` `LoadBalancer` or `NATGateway` resource into the corresponding `ironcore-net`
-objects. Those will be scheduled on `ironcore-net` `Nodes`. Onces this is done, the `metalnetlet` will watch those resources
-and create the corresponding `LoadBalancer` or `NATGateway` objects in the `metalnet` API.
+LoadBalancer and NATGateway resources follow a similar flow. Here, however, the compute provider is not involved.
+The `apinetlet` translates the IronCore LoadBalancer or NATGateway resource into the corresponding `ironcore-net`
+objects. Those are scheduled on `ironcore-net` Nodes. Once this is done, the `metalnetlet` watches those resources
+and creates the corresponding `LoadBalancer` or `NATGateway` objects in the `metalnet` API.
 
 ### `metalnet`, `dpservice` and `metalbond`
 
@@ -92,4 +92,4 @@ The following figure depicts the basic working flow of creating two interfaces f
 
 ![Metalnet Dpservice Metalbond](/metalnet-dpservice-metalbond.png)
 
-`metalnet` controllers watch the metalnet objects such as `Network` and `NetworkInterface`. Upon arriving of a new `NetworkInterface`, `metalnet` communicates with `dpservice` to obtain a newly generated underlying IPv6 address for a corresponding interface's overlay IP address. For example, on `Server-A`, `metalnet` obtains an underlying IPv6 address, `2001:db8::1`, for `interface-A` with a private IP `10.0.0.1`. This encapsulation routing information is announced by `metalnet`'s embedded `metalbond-client` to `metalbond-server` running on a region router, and further synchronised by other `metalbond` instances. For instance, `metalbond` on `Server-B` shall receive this `10.0.0.1@2001:db8::1` information and push it into its local `dpservice` via gRPC. `dpservice` uses these routing information to perform overlay packet encapsulation and decapsulation to achieve communication among VMs running on different servers. Meanwhile, `metalnet` also picks a pci addresss of a VF, such as `0000:3b:00.2`, and attach it as part of `NetworkInterface` status, which is further utilised by `ironcore-net` and `vm-provider`/`libvirt-provider` to create a VM.
+The `metalnet` controllers watch the metalnet objects such as Network and NetworkInterface. Upon arrival of a new NetworkInterface, `metalnet` communicates with `dpservice` to obtain a newly generated underlying IPv6 address for a corresponding interface's overlay IP address. For example, on `Server-A`, `metalnet` obtains an underlying IPv6 address, `2001:db8::1`, for `interface-A` with a private IP `10.0.0.1`. This encapsulation routing information is announced by the embedded `metalbond-client` to `metalbond-server` running on a region router, and further synchronized by other `metalbond` instances. For instance, `metalbond` on `Server-B` receives this `10.0.0.1@2001:db8::1` information and pushes it into its local `dpservice` via gRPC. The `dpservice` uses this routing information to perform overlay packet encapsulation and decapsulation to achieve communication among VMs running on different servers. Meanwhile, `metalnet` also picks a PCI address of a VF, such as `0000:3b:00.2`, and attaches it as part of the NetworkInterface status, which is further used by `ironcore-net` and `libvirt-provider` to create a VM.

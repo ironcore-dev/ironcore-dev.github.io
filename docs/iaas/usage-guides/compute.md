@@ -1,6 +1,6 @@
 # Compute Resources
 
-IronCore compute resources are `Machines`, their associated `Machineclasses` and `MachinePools` that allow you to define, provision, and manage virtual machines. This guide explains the core compute resource types and how to use them.
+IronCore compute resources are Machines, their associated MachineClasses, and MachinePools that allow you to define, provision, and manage virtual machines. This guide explains the core compute resource types and how to use them.
 
 ## Machine
 
@@ -74,7 +74,7 @@ A `MachinePool` is a resource in IronCore that represents a pool of compute reso
 the infrastructure's compute configuration used to provision and manage `Machines`, ensuring resource availability and 
 compatibility with associated `MachineClasses`.
  
-> Note:One `machinepoollet` is responsible for one `MachinePool`.
+> Note: One `machinepoollet` is responsible for one MachinePool.
 
 Details on how `MachinePools` are announced and used can be found in the [Pools and Poollets](/iaas/architecture/scheduling) section.
 

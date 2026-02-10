@@ -10,9 +10,9 @@ There are two main components in the Gardener integration with IronCore:
 ## Machine Controller Manager (MCM)
 
 The [machine-controller-manager-provider-ironcore](https://github.com/ironcore-dev/machine-controller-manager-provider-ironcore-metal)
-is responsible for managing the lifecycle of `Nodes` in a Kubernetes cluster. Here the MCM in essence is translating
-Gardener `Machine` resource to `ServerClaims` and wrapping the `user-data` coming from the Gardner OS extensions into
-an Ignition `Secret`.
+is responsible for managing the lifecycle of Nodes in a Kubernetes cluster. Here the MCM in essence translates
+a Gardener Machine resource to ServerClaims and wraps the `user-data` coming from the Gardener OS extensions into
+an Ignition Secret.
 
 ## Gardener Extension Provider
 

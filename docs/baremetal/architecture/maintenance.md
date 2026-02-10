@@ -2,5 +2,5 @@
 
 TODO:
 
-* Describe the maintenance process
-* Describe the extension points here
+- Describe the maintenance process
+- Describe the extension points here

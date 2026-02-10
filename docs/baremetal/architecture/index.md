@@ -9,7 +9,7 @@ server management and in-band server boot automation.
 
 The out-of-band automation is responsible for the initial provisioning of bare metal servers. Here the main component
 is the `metal-operator`, which is responsible for managing the lifecycle of bare metal server. In the out-of-band
-network, BMCs (Baseboard Management Controllers) are assigned IP addresses (in our case via FeDHCP) and are then reachable
+network, BMCs (Baseboard Management Controllers) are assigned IP addresses (via FeDHCP) and are then reachable
 via the `metal-operator`. The `metal-operator` can then perform actions like [discovering](/baremetal/architecture/discovery)
 and [provisioning](/baremetal/architecture/provisioning) servers. It is also responsible for the [maintenance](/baremetal/architecture/maintenance)
 workflow of bare metal servers.

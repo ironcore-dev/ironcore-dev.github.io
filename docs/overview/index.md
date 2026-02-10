@@ -6,7 +6,7 @@ can transform your workflows.
 
 ## IronCore Architecture
 
-Here's a visual representation of IronCore's two layers. The bare metal management and network automation layers
+The following diagram shows IronCore's two layers. The bare metal management and network automation layers
 belong to the infrastructure management domain, while the IaaS layer provides cloud-like capabilities on top.
 
 ## Infrastructure as a Service (IaaS)

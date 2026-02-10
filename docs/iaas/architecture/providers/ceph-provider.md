@@ -7,8 +7,8 @@ The [`ceph-provider`](https://github.com/ironcore-dev/ceph-provider) contains tw
 
 ## `ceph-volume-provider`
 
-The `ceph-volume-provider` implements the IronCore `VolumeRuntime` interface to manage volumes in a Ceph cluster. A 
-`CreateVolume` IRI call results in the creation of a `ceph image` in the cluster, which can be used as a block device 
+The `ceph-volume-provider` implements the IronCore `VolumeRuntime` interface to manage volumes in a Ceph cluster.
+A `CreateVolume` IRI call results in the creation of a `ceph image` in the cluster, which can be used as a block device
 for virtual machines.
 
 The following diagram visualizes the connection between the `ceph-volume-provider` and the `volumepoollet`:
@@ -28,7 +28,7 @@ graph TD
 ```
 
 Once a `Volume` has been created by the `ceph-volume-provider`, it returns the access information to the `volumepoollet`
-which then propages this as status information to the `Volume` resource in the IronCore API. On the consumer side, e.g. 
+which then propagates this as status information to the Volume resource in the IronCore API. On the consumer side, e.g. 
 [`libvirt-provider`](/iaas/architecture/providers/libvirt-provider), the `Volume` resource is then used to attach the 
 block device to a virtual machine instance using the credentials provided in the `Volume` status.
 
