@@ -31,13 +31,14 @@ export default withMermaid({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       {text: 'Home', link: '/'},
-      {text: 'Overview', link: '/overview'},
+      {text: 'Overview', link: '/overview/'},
       {text: 'Documentation',
       items: [
         {text: 'Infrastructure as a Service', link: '/iaas/getting-started'},
         {text: 'Bare Metal Management', link: '/baremetal/'},
         {text: 'Network Automation', link: '/network-automation/'},
       ]},
+      {text: 'Community', link: '/community/'},
     ],
 
     editLink: {
@@ -167,6 +168,23 @@ export default withMermaid({
     '/network-automation/': [
       {
         text: 'Overview', link: '/network-automation/',
+      },
+    ],
+    '/community/': [
+      {
+        text: 'Community',
+        items: [
+          { text: 'Welcome', link: '/community/' },
+          { text: 'Contributing Guide', link: '/community/contributing' },
+        ],
+      },
+      {
+        text: 'Style Guide',
+        collapsed: false,
+        items: [
+          { text: 'Coding', link: '/community/style-guide/coding' },
+          { text: 'Documentation', link: '/community/style-guide/documentation' },
+        ],
       },
     ],
     },
