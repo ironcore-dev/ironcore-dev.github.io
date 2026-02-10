@@ -7,7 +7,7 @@ The [`ceph-provider`](https://github.com/ironcore-dev/ceph-provider) contains tw
 
 ## `ceph-volume-provider`
 
-The `ceph-volume-provider` implements the IronCore `VolumeRuntime` interface to manage volumes in a Ceph cluster. A 
+The `ceph-volume-provider` implements the IronCore `VolumeRuntime` interface to manage volumes in a Ceph cluster.
 A `CreateVolume` IRI call results in the creation of a `ceph image` in the cluster, which can be used as a block device
 for virtual machines.
 

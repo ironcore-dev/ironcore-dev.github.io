@@ -68,7 +68,7 @@ The image below illustrates the relationship between `metalnetlet` and `metalnet
 The `NetworkInterface` creation flow will look like this:
 1. A provider (in this case `libvirt-provider`) will create a virtual machine against the libvirt daemon on a hypervisor host.
 In case a `NetworkInterface` should be attached to this virtual machine, the `machinepoollet` will call the corresponding
-the `AttachNetworkInterface` method on the [`MachineRuntime`](/iaas/architecture/runtime-interface#machineruntime-interface)
+`AttachNetworkInterface` method on the [`MachineRuntime`](/iaas/architecture/runtime-interface#machineruntime-interface)
 interface implemented by the `libvirt-provider`. The `libvirt-provider` itself then has a plugin into the `ironcore-net` 
 API to create a `NetworkInterface` resource in the `ironcore-net` API.
 2. The `metalnetlet` will then watch for changes to the `NetworkInterface` resource and create the corresponding `NetworkInterface` 
