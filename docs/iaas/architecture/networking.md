@@ -81,7 +81,7 @@ use the PCI address in the status to attach the virtual network interface to the
 LoadBalancer and NATGateway resources follow a similar flow. Here, however, the compute provider is not involved.
 The `apinetlet` translates the IronCore LoadBalancer or NATGateway resource into the corresponding `ironcore-net`
 objects. Those are scheduled on `ironcore-net` Nodes. Once this is done, the `metalnetlet` watches those resources
-and create the corresponding `LoadBalancer` or `NATGateway` objects in the `metalnet` API.
+and creates the corresponding `LoadBalancer` or `NATGateway` objects in the `metalnet` API.
 
 ### `metalnet`, `dpservice` and `metalbond`
 
