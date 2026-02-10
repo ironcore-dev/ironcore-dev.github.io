@@ -27,7 +27,7 @@ The `ironcore-net` service is a global coordination service within an IronCore i
 the place where all network-related decisions like reservation of unique IP addresses, allocation of unique network IDs, etc. are made.
 
 The `ironcore-net` service has, apart from its [own API](https://github.com/ironcore-dev/ironcore-net/tree/main/api/core/v1alpha1), two main components:
-- **apinetlet**: This component is responsible from translating the user-facing API objects from the `networking` resource group into the internal representation used by `ironcore-net`. 
+- **apinetlet**: This component is responsible for translating the user-facing API objects from the `networking` resource group into the internal representation used by `ironcore-net`. 
 - **metalnetlet**: This component is interfacing with the `metalnet` API to manage cluster-level networking resources like `NetworkInterface` which are requested globally in the `ironcore-net` API but are implemented by `metalnet` on a hypervisor level.
 
 ### Example `apinetlet` flow
