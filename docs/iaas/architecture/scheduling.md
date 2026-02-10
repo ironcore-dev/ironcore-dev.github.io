@@ -12,7 +12,7 @@ also provides in the Pool status the available MachineClasses a Pool supports. A
 a list of resource-specific capabilities that a Pool can provide, such as CPU, memory, and storage.
 
 Pools and Classes are defined for all major resource types in IronCore, including compute and storage. Resources in the
-`networking` API have no Pool concept, as they are not scheduled but rather provided on-demand by the network related
+`networking` API have no Pool concept, as they are not scheduled but rather provided on-demand by the network-related
 components. The details are described in the [networking section](/iaas/architecture/networking).
 
 An example definition of a Pool from the `compute` API group (MachinePool) is shown below:
