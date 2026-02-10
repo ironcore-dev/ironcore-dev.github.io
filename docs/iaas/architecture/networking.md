@@ -24,7 +24,7 @@ correctly propagated across the IronCore installation.
 ## `ironcore` and `ironcore-net`
 
 The `ironcore-net` service is a global coordination service within an IronCore installation. Therefore, it is a single instance and
-the place where all network related decisions like reservation of unique IP addresses, allocation of unique network IDs, etc. are made.
+the place where all network-related decisions like reservation of unique IP addresses, allocation of unique network IDs, etc. are made.
 
 The `ironcore-net` service has, apart from its [own API](https://github.com/ironcore-dev/ironcore-net/tree/main/api/core/v1alpha1), two main components:
 - **apinetlet**: This component is responsible from translating the user-facing API objects from the `networking` resource group into the internal representation used by `ironcore-net`. 
