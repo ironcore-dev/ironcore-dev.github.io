@@ -12,7 +12,7 @@ in a Kubernetes-native way. It leverages the power of Kubernetes Custom Resource
 ## Core Components
 
 The core components of the bare metal management in IronCore include:
-- [**Metal Operator**](https://github.com/ironcore-dev/metal-operator): The central component that manages the lifecycle of bare metal servers.
+- [**Metal Operator**](https://ironcore.dev/metal-operator): The central component that manages the lifecycle of bare metal servers.
 - [**Boot Operator**](https://github.com/ironcore-dev/boot-operator): iPXE and HTTP boot server that provides boot images and Ignition configurations.
 - [**FeDHCP**](https://github.com/ironcore-dev/fedhcp): A DHCP server that provides in-band and out-of-band network configuration to bare metal servers.
 
