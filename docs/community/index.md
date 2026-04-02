@@ -18,6 +18,11 @@ All IronCore development happens in the open on [GitHub](https://github.com/iron
 - Report bugs or request features by opening an [issue](https://github.com/ironcore-dev/ironcore/issues)
 - Follow the project's development and roadmap
 
+### Community Meetings
+
+The IronCore community holds regular meetings to discuss ongoing development, feature proposals, and other community topics.
+Visit our [Meetings Overview](/community/meetings) if you're interested in attending.
+
 ## Contribute
 
 We welcome contributions of all kinds — from code and documentation to bug reports and feature ideas. If you'd like to
