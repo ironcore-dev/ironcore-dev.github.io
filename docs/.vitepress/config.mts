@@ -133,7 +133,10 @@ export default withMermaid({
       ],
     '/baremetal/': [
       {
-        text: 'Overview', link: '/baremetal/',
+        text: 'Bare Metal Management',
+        items: [
+          { text: 'Overview', link: '/baremetal/' },
+        ],
       },
       {
         text: "Architecture",
