@@ -31,6 +31,23 @@ Not sure where to start? Here are a few ways to find your first contribution:
 **Tip:** Before working on a larger change, open an issue first to discuss your approach with the maintainers. This
 avoids unnecessary work and helps align your contribution with the project's direction.
 
+## Before You Contribute
+
+Before writing code, make sure your contribution has a home in an issue. This keeps the discussion visible to
+maintainers and other contributors and avoids duplicate or misaligned work.
+
+- **Look for an existing issue** in the repository you want to contribute to. Someone may already be tracking the
+  bug or feature you have in mind.
+- **If nothing matches, open a new issue** in the corresponding project to describe the problem or idea. Use it to
+  clarify open points and agree on an approach with the maintainers before starting implementation.
+- **For larger or cross-cutting changes**, IronCore uses a central
+  [enhancements repository](https://github.com/ironcore-dev/enhancements) where contributors submit
+  **IronCore Enhancement Proposals (IEPs)**. An IEP is the place to describe the motivation, design, and trade-offs
+  of a substantial idea or solution that affects one or more IronCore projects.
+- **Even for an IEP, start with an issue.** Especially for new contributors, please open an issue in the
+  enhancements repository first to outline the idea and gather early feedback. This makes it much easier for 
+  maintainers to engage and for the proposal to land successfully.
+
 ## Making a Contribution
 
 ### Fork and Clone
