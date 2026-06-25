@@ -13,7 +13,7 @@ export default withMermaid({
       ['meta', {property: 'og:description', content: 'IronCore is an Open-Source platform designed to empower users by providing a robust Infrastructure as a Service layer, Bare Metal Management and Network Automation'}],
       ['meta', {property: 'og:site_name', content: 'IronCore Project'}],
       ['meta', {property: 'og:image', content: 'https://raw.githubusercontent.com/ironcore-dev/ironcore-dev.github.io/refs/heads/main/docs/public/og-ironcore.png'}],
-      ['meta', {property: 'og:url', content: 'https://ironcore.dev/'}],
+      ['meta', {property: 'og:url', content: 'https://ironcore.dev/', target: '_self'}],
   ],
   vite: {
     resolve: {
@@ -38,7 +38,7 @@ export default withMermaid({
         {text: 'Bare Metal Management', link: '/baremetal/'},
         {text: 'Network Automation', link: '/network-automation/'},
       ]},
-      {text: 'Community', link: '/community/'},
+      {text: 'Community', link: 'https://ironcore.dev/community/'},
     ],
 
     editLink: {
