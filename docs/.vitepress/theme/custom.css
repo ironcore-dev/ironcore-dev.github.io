@@ -30,6 +30,11 @@
     padding: 18px;
 }
 
+/* hide external link arrow for same-family ironcore.dev nav links */
+.VPNavBar a.vp-external-link-icon[href^="https://ironcore.dev"]::after {
+    display: none;
+}
+
 /* used in reference/default-theme-search */
 img[src='/search.png'] {
     width: 100%;
