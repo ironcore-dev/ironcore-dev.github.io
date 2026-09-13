@@ -1,4 +1,4 @@
-# Operator Guide
+# Operations Guide
 
 This guide provides operational instructions for system operators, covering deployment, maintenance, and troubleshooting of the IronCore project.
 
