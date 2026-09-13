@@ -78,8 +78,8 @@ graph TD
     A --> I[Lifecycle Management]
      
     G -->|Discovery & Provisioning| M[Network Devices]
-    H -->|Configuration Management| N[Network Devices]
-    I -->|Health Monitoring| O[Reliability]
+    H -->|Configuration Management| M[Network Devices]
+    I -->|Health Monitoring| N[Reliability]
 ```
 
 The Network Automation layer streamlines the management of network devices and configurations. It offers:
