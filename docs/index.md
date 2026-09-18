@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: "IronCore Project"
-  text: "Cloud Native Infrastructure Management"
-  tagline: "IronCore is an open-source platform designed to empower users with a robust Infrastructure as a Service layer, bare-metal management, network automation, and AI/accelerator infrastructure."
+  text: "Declarative Infrastructure Management"
+  tagline: "Open-source, Kubernetes-native infrastructure: IaaS, bare metal lifecycle management, network automation and AI/accelerator management."
   image:
     src: https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg
     alt: IronCore
