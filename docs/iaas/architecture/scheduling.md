@@ -50,7 +50,7 @@ to the `poollet` responsible for the announced Pool that something needs to be d
 
 The current scheduler implementation works on a best-effort basis, meaning that it tries to find a suitable Pool and
 assign the correct Pool but does not guarantee that the Machine or Volume will be created. A new Reservation-based
-scheduling mechanism described in this [enhancement proposal](https://github.com/ironcore-dev/ironcore/blob/main/docs/proposals/11-scheduling.md)
+scheduling mechanism described in this [enhancement proposal](https://github.com/ironcore-dev/enhancements/blob/main/ieps/11-scheduling.md)
 should provide a more robust scheduling mechanism in the future.
 
 ::: warning
