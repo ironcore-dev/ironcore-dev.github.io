@@ -5,6 +5,9 @@ LABEL project=ironcore_docs
 # Install bash (optional but useful)
 RUN apk add --no-cache bash
 
+# Bump npm to latest stable
+RUN npm install -g npm@12.2.1
+
 # Set working directory
 WORKDIR /app
 
