@@ -9,6 +9,6 @@
     "docs:preview": "node_modules/.bin/vitepress preview docs"
   },
   "dependencies": {
-    "@plausible-analytics/tracker": "0.4.6"
+    "@plausible-analytics/tracker": "0.4.7"
   }
 }
