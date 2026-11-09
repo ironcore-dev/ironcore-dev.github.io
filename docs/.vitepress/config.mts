@@ -1,5 +1,20 @@
 import { withMermaid } from "vitepress-plugin-mermaid";
 import { fileURLToPath, URL } from 'node:url'
+import { readdirSync, readFileSync } from 'node:fs'
+
+// Blog posts list for docs/blog/index.md, generated at build time.
+// Expects `title` and `date` frontmatter in every docs/blog/*.md except index.md.
+const posts = readdirSync(new URL('../blog', import.meta.url))
+  .filter((file) => file.endsWith('.md') && file !== 'index.md')
+  .map((file) => {
+    const content = readFileSync(new URL(`../blog/${file}`, import.meta.url), 'utf-8')
+    return {
+      title: content.match(/^title:\s*(.+)$/m)?.[1] ?? file,
+      date: content.match(/^date:\s*(.+)$/m)?.[1] ?? '',
+      url: `/blog/${file.replace(/\.md$/, '')}`,
+    }
+  })
+  .sort((a, b) => b.date.localeCompare(a.date))
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid({
@@ -16,6 +31,9 @@ export default withMermaid({
       ['meta', {property: 'og:url', content: 'https://ironcore.dev/'}],
   ],
   vite: {
+    define: {
+      __POSTS__: JSON.stringify(posts),
+    },
     resolve: {
       alias: [
         {
@@ -31,6 +49,7 @@ export default withMermaid({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       {text: 'Home', link: '/'},
+      {text: 'Blog', link: '/blog/'},
       {text: 'Overview', link: '/overview/'},
       {text: 'Documentation',
       items: [
@@ -188,6 +207,12 @@ export default withMermaid({
     '/network-automation/': [
       {
         text: 'Overview', link: '/network-automation/',
+      },
+    ],
+    '/blog/': [
+      {
+        text: 'Posts',
+        items: posts.map(({ title, url }) => ({ text: title, link: url })),
       },
     ],
     '/community/': [
