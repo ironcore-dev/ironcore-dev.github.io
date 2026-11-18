@@ -4,14 +4,14 @@
 # tools. (i.e. podman)
 CONTAINER_TOOL ?= docker
 
-# Docker image name for the mkdocs based local development setup
+# Docker image name for the VitePress based local development setup
 IMAGE=ironcore-dev/ironcore-dev.github.io
 
 .PHONY: startdocs
-startdocs: ## Start the local mkdocs based development environment.
-	docker build -t $(IMAGE) -f docs/Dockerfile . --load
-	docker run --rm -p 5173:5173 -v `pwd`/:/app $(IMAGE)
+startdocs: ## Start the local VitePress based development environment.
+	$(CONTAINER_TOOL) build -t $(IMAGE) -f docs/Dockerfile . --load
+	$(CONTAINER_TOOL) run --rm -p 5173:5173 -v `pwd`/:/app -v /app/node_modules $(IMAGE)
 
 .PHONY: cleandocs
-cleandocs: ## Remove all local mkdocs Docker images (cleanup).
-	docker container prune --force --filter "label=project=ironcore_docs"
+cleandocs: ## Remove all local VitePress Docker images (cleanup).
+	$(CONTAINER_TOOL) image prune --all --force --filter "label=project=ironcore_docs"
