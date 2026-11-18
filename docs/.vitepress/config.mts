@@ -63,6 +63,8 @@ export default withMermaid({
             items: [
             { text: 'Index', link: '/overview/' },
             { text: 'Design Principles', link: '/overview/principles' },
+            { text: 'Example Landscape: Canary Region Blueprint', link: '/overview/canary-region-blueprint' },
+            { text: 'From Lights-Out to Running Cluster', link: '/overview/lights-out' },
             ]
         }
       ],
