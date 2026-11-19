@@ -32,6 +32,10 @@ export default withMermaid({
     nav: [
       {text: 'Home', link: '/'},
       {text: 'Overview', link: '/overview/'},
+      {text: 'Tutorials',
+      items: [
+        {text: 'Bootstrap', link: '/tutorials/bootstrap'},
+      ]},
       {text: 'Documentation',
       items: [
         {text: 'Infrastructure as a Service', link: '/iaas/getting-started'},
