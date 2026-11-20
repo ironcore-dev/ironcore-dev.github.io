@@ -34,7 +34,7 @@ export default withMermaid({
       {text: 'Overview', link: '/overview/'},
       {text: 'Tutorials',
       items: [
-        {text: 'Bootstrap', link: '/tutorials/bootstrap'},
+        {text: 'Management Cluster', link: '/tutorials/mgmt-cluster-bootstrap'},
       ]},
       {text: 'Documentation',
       items: [

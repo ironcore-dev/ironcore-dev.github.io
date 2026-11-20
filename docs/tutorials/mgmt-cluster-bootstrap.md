@@ -1,5 +1,9 @@
 # Management Cluster Bootstrap Guide
 
+::: info
+The ansible roles referenced in this guide will be published soon. Until then, all steps can be executed manually from the manifests and commands shown here.
+:::
+
 ## Overview
 
 The goal of this bootstrap guide is to stand up a self-managed CAPI Kubernetes cluster on bare metal, running the full IronCore metal stack. This cluster is the foundation of a new availability zone (AZ), and every workload cluster in that AZ will be provisioned from it. Once complete, the cluster provisions and manages itself: adding, replacing, or upgrading its own control-plane nodes through Cluster API.
@@ -132,7 +136,7 @@ After `kubeadm init` completes, a few IronCore-specific fixups:
 
 - **Approve kubelet serving CSRs**: Because we set `serverTLSBootstrap: true`, the kubelet requests its serving certificate via CSR. Approve the pending CSRs signed by `kubernetes.io/kubelet-serving`.
 - **Patch the node's `podCIDRs`**: kubeadm does not assign one because the metal stack runs with `--allocate-node-cidrs=false` (pod CIDRs are assigned by the cloud-controller-manager on CAPI clusters). Patch the node manually with the node's `/112` pod CIDR - a sub-range of its `/64` host prefix, offset to `::1:0` so it does not overlap the node's own `::1` loopback (see [Prerequisites](#prerequisites-before-running-any-phase)), e.g. `2001:db8:1111:1::1:0/112` for mgmt-1.
-- **Prepend the cluster DNS to `/etc/resolv.conf`**: Add the CoreDNS *external* LoadBalancer address (`SVC_CIDR::1:a`) as the first nameserver on the inband machines so kubectl and curl can resolve in-cluster service names like `metaldata.ironcore.dev` and `boot.onmetal.de` that CoreDNS rewrites internally. In Phase 2 we deploy CoreDNS as a `LoadBalancer` service; the load balancer assigns each `SVC_CIDR::XYZ` cluster IP a publicly routable counterpart at `SVC_CIDR::1:XYZ`. In this case: cluster IP `SVC_CIDR::a` maps to external IP `SVC_CIDR::1:a`. The inband machines use the external address because they do not sit on the cluster's service network. We use [metal-load-balancer-controller](https://github.com/ironcore-dev/metal-load-balancer-controller) with FRR to announce these addresses via BGP; alternatively, use a publicly available load balancer like MetalLB.
+- **Prepend the cluster DNS to `/etc/resolv.conf`**: Add the CoreDNS *external* LoadBalancer address (`SVC_CIDR::1:a`) as the first nameserver on the inband machines so kubectl and curl can resolve in-cluster service names like `metaldata.example.com` and `boot.onmetal.de` that CoreDNS rewrites internally. In Phase 2 we deploy CoreDNS as a `LoadBalancer` service; the load balancer assigns each `SVC_CIDR::XYZ` cluster IP a publicly routable counterpart at `SVC_CIDR::1:XYZ`. In this case: cluster IP `SVC_CIDR::a` maps to external IP `SVC_CIDR::1:a`. The inband machines use the external address because they do not sit on the cluster's service network. We use [metal-load-balancer-controller](https://github.com/ironcore-dev/metal-load-balancer-controller) with FRR to announce these addresses via BGP; alternatively, use a publicly available load balancer like MetalLB.
 
 Once these are done, the bootstrap cluster is a functional single-node Kubernetes ready to receive the metal stack (Phase 2).
 
@@ -244,7 +248,7 @@ At this stage only **mgmt-2** is listed in `metal-config-<zone>.yaml` (FeDHCP) a
       5. `stateless` - stateless address configuration.
       6. `metal` - matches incoming DHCP requests by client MAC against `metal-config-<zone>.yaml` (mgmt-2 only at this stage) and creates an `Endpoint` CR (an IronCore metal-operator CRD) for each seen client MAC. metal-operator reconciles those `Endpoint`s and drives the BMC discovery flow from there (see [metal-operator architecture](https://ironcore.dev/metal-operator/architecture.html)). This is why a BMC's DHCPv6 request is the trigger for discovery, not the DHCP lease itself.
       7. `leases` - lease bookkeeping, from `leases-config.yaml`.
-    - **ConfigMaps**: The OOB kustomization applies a `nameSuffix: -oob`, so the generated ConfigMaps are `metal-config-oob`, `leases-config-oob`, and `ntp-config-oob`, and the deployment is `fedhcp-oob` (all referenced with these suffixed names). FeDHCP's main `config` ConfigMap is likewise suffixed. Generated via `configMapGenerator`. The `-oob`-suffixed names are what [6.2.1](#62-update-discovery-configuration) updates with the full mgmt server MAC set.
+    - **ConfigMaps**: The OOB kustomization applies a `nameSuffix: -oob`, so the generated ConfigMaps are `metal-config-oob`, `leases-config-oob`, and `ntp-config-oob`, and the deployment is `fedhcp-oob` (all referenced with these suffixed names). FeDHCP's main `config` ConfigMap is likewise suffixed. Generated via `configMapGenerator`. The `-oob`-suffixed names are what [6.2](#62-update-discovery-configuration) updates with the full mgmt server MAC set.
 
     **Inband (data network).**
     - **Service**: `LoadBalancer`, `clusterIP` pinned to `SVC_CIDR::547` -> external `SVC_CIDR::1:547`.
@@ -358,7 +362,7 @@ Four resources define the cluster. Apply as a single kustomization:
 
 ### 3.3 Ignition userdata
 
-The control-plane Ignition config comes from `./ignition/` (the repo's source of truth for node userdata), generated fresh by `ignition/generate-management-ignition.sh` during the capi-cluster role and attached to the `KubeadmControlPlane`'s `containerLinuxConfig.additionalConfig` as a file. Highlights of what the generated config does:
+The control-plane Ignition config is attached to the `KubeadmControlPlane`'s `containerLinuxConfig.additionalConfig` as a file. Highlights of what it does:
 
 - **Users / SSH keys**: Operator SSH keys for access to the provisioned nodes.
 - **systemd-networkd**: Two `.network` files matched by NIC name for the inband (100 Gbps, MTU 9100, DHCPv6) and OOB (10 Gbps, MTU 1500) interfaces. NIC names are hardware-specific - **adjust the `Name=` globs to match your servers**.
