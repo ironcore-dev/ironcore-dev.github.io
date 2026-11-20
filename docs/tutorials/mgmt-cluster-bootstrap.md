@@ -26,7 +26,7 @@ Addressing and placeholder conventions used throughout this guide:
 - All IPv6 addresses come from the RFC 3849 documentation prefix `2001:db8::/32`. Replace this with your real base (`ipv6_base`) everywhere.
 - `1111` is the example zone's `ipv6_block`, so the zone prefix is `2001:db8:1111::/48` throughout: `ipv6_prefix = <ipv6_base>:<ipv6_block>`. Each zone gets its own `ipv6_block`, which must match what is configured for the zone in the roles.
 - The fourth hextet carves the zone prefix into functions: `1234` is the service range (`SVC_CIDR` = `2001:db8:1111:1234::/112`), and `0001`/`0002`/`0003` are the per-node `/64` host prefixes for mgmt-1/2/3. There is no cluster-wide pod range: each node's `podCIDR` is a `/112` carved out of its own host `/64`, offset to `::1:0` so it never overlaps the node's own `::1` loopback (e.g. mgmt-1's pod CIDR is `2001:db8:1111:1::1:0/112`, sub-range of `2001:db8:1111:1::/64`), and the node's loopback / `INTERNAL-IP` is the `::1` of its `/64` (e.g. `2001:db8:1111:1::1` for mgmt-1).
-- A LoadBalancer service with cluster IP `SVC_CIDR::xyz` gets the external, publicly routable counterpart `SVC_CIDR::1:xyz` (see [1.3](#13-post-install)).
+- A LoadBalancer service with cluster IP `SVC_CIDR::xyz` gets the external, publicly routable counterpart `SVC_CIDR::1:xyz` (see [1.3](#_1-3-post-install)).
 - `<zone>` stands for your zone name (e.g. `zone1` in the delivery), `<capi_version>` / `<k8s_version>` / `<tag>` for versions you pin.
 - Code blocks are pasteable once you have exported `SVC_CIDR` and `ZONE` for your environment:
   ```bash
@@ -42,13 +42,13 @@ The guide was validated against the versions below. Newer releases may change be
 |---|---|---|
 | Kubernetes (kubeadm/kubelet) | v1.34.6 | also the version of the CAPI-provisioned cluster |
 | Cluster API / clusterctl | v1.12.2 | same version for `clusterctl init` and `clusterctl move` |
-| cert-manager | v1.19.1 | must match `CertManagerDefaultVersion` of the chosen CAPI release (see [2.2](#22-cluster-api)) |
+| cert-manager | v1.19.1 | must match `CertManagerDefaultVersion` of the chosen CAPI release (see [2.2](#_2-2-cluster-api)) |
 | Calico | v3.31.5 | pinned by the kubernetes role |
 | metal-operator | v0.7.x (≥ v0.7.1) | the FeDHCP integration requires the v0.7 series; **do not use ≥ v0.8.0** (incompatible, blocked by [FeDHCP#456](https://github.com/ironcore-dev/FeDHCP/issues/456): FeDHCP does not yet create `BMC` resources during discovery). Bundled metaldata requires ≥ v0.7.1. |
 | metalprobe | `<tag>` | part of metal-operator; keep the probe image tag in lockstep with your metal-operator release |
-| GardenLinux CAPI image | `<tag>` | the CAPI variant (kubeadm/kubelet bundled), see [3.2](#32-capi-resources) |
-| FeDHCP | v0.8.7 (`config/default`) | OOB + inband; well-known LB addresses in [2.4](#24-data-plane-and-services) |
-| cloud-provider-metal (CCM) | v0.6.0 | assigns node addresses and offset pod CIDRs on the CAPI cluster ([4.2.1](#421-cloud-controller-manager)) |
+| GardenLinux CAPI image | `<tag>` | the CAPI variant (kubeadm/kubelet bundled), see [3.2](#_3-2-capi-resources) |
+| FeDHCP | v0.8.7 (`config/default`) | OOB + inband; well-known LB addresses in [2.4](#_2-4-data-plane-and-services) |
+| cloud-provider-metal (CCM) | v0.6.0 | assigns node addresses and offset pod CIDRs on the CAPI cluster ([4.2.1](#_4-2-1-cloud-controller-manager)) |
 
 ---
 
@@ -64,8 +64,8 @@ The guide was validated against the versions below. Newer releases may change be
 ### Config files to prepare
 
 - BMC MAC addresses collected for every management/compute/storage server.
-- `metal-config-<zone>.yaml` prepared. FeDHCP discovery plugin configuration (hostname -> MAC); see the example in [6.2](#62-update-discovery-configuration).
-- `oob-mac-prefixes-<zone>.yaml` prepared. Used by metal-operator for BMC discovery (MAC prefix -> BMC creds); see the example in [6.2](#62-update-discovery-configuration).
+- `metal-config-<zone>.yaml` prepared. FeDHCP discovery plugin configuration (hostname -> MAC); see the example in [6.2](#_6-2-update-discovery-configuration).
+- `oob-mac-prefixes-<zone>.yaml` prepared. Used by metal-operator for BMC discovery (MAC prefix -> BMC creds); see the example in [6.2](#_6-2-update-discovery-configuration).
 
 > **Checkpoint.** mgmt-1 is up with working IPv6, NAT64, and DNS64 connectivity, ready for the bootstrap process.
 >
@@ -154,7 +154,7 @@ Once these are done, the bootstrap cluster is a functional single-node Kubernete
 
 ## Phase 2: Deploy Metal Stack (bootstrap cluster)
 
-Deploy the IronCore metal stack on the bootstrap cluster. This installs all CRDs, controllers, and network services needed to discover and provision bare metal servers. Everything runs on the bootstrap cluster so we can use it to bring up the *real* CAPI-managed cluster in Phase 3. In this phase the bootstrap cluster **is** the metal API cluster - the Kubernetes cluster whose API the metal controllers talk to in order to read and write metal CRs (`Server`, `ServerClaim`, `IroncoreMetalMachine`, ...). The one exception is the cloud-controller-manager, which is not deployed on the bootstrap cluster at all (it is CAPI-cluster-only, see [Phase 4](#phase-4-deploy-metal-stack-on-capi-cluster)); on the bootstrap cluster pod CIDRs are patched manually instead ([1.3](#13-post-install)). The metal API is repointed at the CAPI cluster in Phase 6.
+Deploy the IronCore metal stack on the bootstrap cluster. This installs all CRDs, controllers, and network services needed to discover and provision bare metal servers. Everything runs on the bootstrap cluster so we can use it to bring up the *real* CAPI-managed cluster in Phase 3. In this phase the bootstrap cluster **is** the metal API cluster - the Kubernetes cluster whose API the metal controllers talk to in order to read and write metal CRs (`Server`, `ServerClaim`, `IroncoreMetalMachine`, ...). The one exception is the cloud-controller-manager, which is not deployed on the bootstrap cluster at all (it is CAPI-cluster-only, see [Phase 4](#phase-4-deploy-metal-stack-on-capi-cluster)); on the bootstrap cluster pod CIDRs are patched manually instead ([1.3](#_1-3-post-install)). The metal API is repointed at the CAPI cluster in Phase 6.
 
 For per-component details refer to the upstream docs:
 
@@ -166,17 +166,22 @@ For per-component details refer to the upstream docs:
 
 ### 2.1 CNI and TLS baseline
 
-1. **Calico** - IPv6 CNI. Applied via kustomize with patches to the upstream `calico.yaml`:
-   - **`calico-config` ConfigMap** (`patch-configmap-ipv6.yaml`):
-     - `calico_backend: none` - policy-only mode, BIRD/BGP disabled (the fabric BGP from the network prerequisites handles reachability).
-     - CNI plugin config: `host-local` IPAM with `subnet: usePodCidrIPv6`, `assign_ipv4: false`, `assign_ipv6: true`; `portmap.snat: false`.
-   - **`calico-node` DaemonSet** (`patch-daemonset-ipv6.yaml`):
-     - Env: `IP=none`, `IP6=autodetect`, `FELIX_IPV6SUPPORT=true`, `USE_POD_CIDR=true`, `CALICO_IPV4POOL_IPIP=Never`.
-     - Liveness/readiness probes reduced to `-felix-live` / `-felix-ready` (BIRD checks removed).
-2. **cert-manager** - TLS certificate lifecycle for webhooks. Installed *manually* (not via `clusterctl init --core-provider`) so it stays under our control across upgrades.
-   - Applied via kustomize pointing at the upstream release `https://github.com/cert-manager/cert-manager/releases/download/<version>/cert-manager.yaml`.
-   - The version **must match** what `clusterctl` would install for the chosen CAPI version; otherwise `clusterctl init` will try to install its own copy and conflict. Look up `CertManagerDefaultVersion` for your `capi_version` at [cluster-api/cmd/clusterctl/client/config/cert_manager_client.go](https://github.com/kubernetes-sigs/cluster-api/blob/<capi_version>/cmd/clusterctl/client/config/cert_manager_client.go).
-   - If you do not need any kustomization on top of the upstream manifests, you can skip this step entirely: `clusterctl init` in [2.2](#22-cluster-api) will install cert-manager automatically.
+#### 2.1.1 Calico
+
+IPv6 CNI. Applied via kustomize with patches to the upstream `calico.yaml`:
+- **`calico-config` ConfigMap** (`patch-configmap-ipv6.yaml`):
+  - `calico_backend: none` - policy-only mode, BIRD/BGP disabled (the fabric BGP from the network prerequisites handles reachability).
+  - CNI plugin config: `host-local` IPAM with `subnet: usePodCidrIPv6`, `assign_ipv4: false`, `assign_ipv6: true`; `portmap.snat: false`.
+- **`calico-node` DaemonSet** (`patch-daemonset-ipv6.yaml`):
+  - Env: `IP=none`, `IP6=autodetect`, `FELIX_IPV6SUPPORT=true`, `USE_POD_CIDR=true`, `CALICO_IPV4POOL_IPIP=Never`.
+  - Liveness/readiness probes reduced to `-felix-live` / `-felix-ready` (BIRD checks removed).
+
+#### 2.1.2 cert-manager
+
+TLS certificate lifecycle for webhooks. Installed *manually* (not via `clusterctl init --core-provider`) so it stays under our control across upgrades.
+- Applied via kustomize pointing at the upstream release `https://github.com/cert-manager/cert-manager/releases/download/<version>/cert-manager.yaml`.
+- The version **must match** what `clusterctl` would install for the chosen CAPI version; otherwise `clusterctl init` will try to install its own copy and conflict. Look up `CertManagerDefaultVersion` for your `capi_version` at [cluster-api/cmd/clusterctl/client/config/cert_manager_client.go](https://github.com/kubernetes-sigs/cluster-api/blob/<capi_version>/cmd/clusterctl/client/config/cert_manager_client.go).
+- If you do not need any kustomization on top of the upstream manifests, you can skip this step entirely: `clusterctl init` in [2.2](#_2-2-cluster-api) will install cert-manager automatically.
 
 > **Checkpoint.** Calico and cert-manager are running; the bootstrap cluster node is `Ready` and admission webhooks can be served.
 >
@@ -189,95 +194,119 @@ For per-component details refer to the upstream docs:
 
 ### 2.2 Cluster API
 
-1. **clusterctl** - download the binary matching `capi_version` from the [CAPI releases page](https://github.com/kubernetes-sigs/cluster-api/releases). Same version used both for `clusterctl init` and for `clusterctl move` later.
-2. **CAPI core + kubeadm providers** - set `EXP_KUBEADM_BOOTSTRAP_FORMAT_IGNITION=true` in the environment before running `clusterctl init` (the GardenLinux OS image in Phase 3 consumes an Ignition userdata format, which the kubeadm bootstrap provider only emits when this feature gate is enabled), then initialize:
-   ```bash
-   EXP_KUBEADM_BOOTSTRAP_FORMAT_IGNITION=true clusterctl init \
-     --core cluster-api:<capi_version> \
-     -b kubeadm:<capi_version> \
-     -c kubeadm:<capi_version>
-   ```
-3. **cluster-api-provider-ironcore-metal** - the IronCore-specific CAPI infrastructure provider. Installs the `IroncoreMetalCluster` / `IroncoreMetalMachine` / `IroncoreMetalMachineTemplate` CRDs. Apply the latest release from [cluster-api-provider-ironcore-metal](https://github.com/ironcore-dev/cluster-api-provider-ironcore-metal/releases).
+#### 2.2.1 clusterctl
+
+download the binary matching `capi_version` from the [CAPI releases page](https://github.com/kubernetes-sigs/cluster-api/releases). Same version used both for `clusterctl init` and for `clusterctl move` later.
+
+#### 2.2.2 CAPI core + kubeadm providers
+
+set `EXP_KUBEADM_BOOTSTRAP_FORMAT_IGNITION=true` in the environment before running `clusterctl init` (the GardenLinux OS image in Phase 3 consumes an Ignition userdata format, which the kubeadm bootstrap provider only emits when this feature gate is enabled), then initialize:
+```bash
+EXP_KUBEADM_BOOTSTRAP_FORMAT_IGNITION=true clusterctl init \
+  --core cluster-api:<capi_version> \
+  -b kubeadm:<capi_version> \
+  -c kubeadm:<capi_version>
+```
+
+#### 2.2.3 cluster-api-provider-ironcore-metal
+
+the IronCore-specific CAPI infrastructure provider. Installs the `IroncoreMetalCluster` / `IroncoreMetalMachine` / `IroncoreMetalMachineTemplate` CRDs. Apply the latest release from [cluster-api-provider-ironcore-metal](https://github.com/ironcore-dev/cluster-api-provider-ironcore-metal/releases).
 
 ### 2.3 Metal control-plane
 
 At this stage only **mgmt-2** is listed in `metal-config-<zone>.yaml` (FeDHCP) and `oob-mac-prefixes-<zone>.yaml` (metal-operator). That way it is the only server discovered on the bootstrap cluster - just enough to bring up the CAPI cluster in Phase 3. mgmt-1 and mgmt-3 are added later in Phase 6.
 
-1. **boot-operator** - HTTP and/or iPXE boot server. Serves OS images to servers being provisioned. Applied via kustomize on top of `github.com/ironcore-dev/boot-operator/config/default`.
+#### 2.3.1 boot-operator
 
-   **Common (both boot flavors).**
-   - **Service**: A dedicated `boot-operator-service` of type `LoadBalancer` in the `boot-operator-system` namespace, exposing port `8083`. The `clusterIP` is pinned explicitly (e.g. `SVC_CIDR::efac`) so the address is stable and predictable - metal-load-balancer-controller then assigns the corresponding external `SVC_CIDR::1:efac`. The same service is reused for HTTP boot and iPXE.
-   - **Controllers**: enable the flavor(s) you need via `--controllers=`:
-     - HTTP boot: `httpbootconfig,serverbootconfighttp`
-     - iPXE boot: `ipxebootconfig,serverbootconfigpxe`
+HTTP and/or iPXE boot server. Serves OS images to servers being provisioned. Applied via kustomize on top of `github.com/ironcore-dev/boot-operator/config/default`.
 
-     Prefer one flavor per environment: enabling both is racy on current boot-operator releases (see [boot-operator#292](https://github.com/ironcore-dev/boot-operator/pull/292)) and dual-mode support may be dropped upstream.
+**Common (both boot flavors).**
+- **Service**: A dedicated `boot-operator-service` of type `LoadBalancer` in the `boot-operator-system` namespace, exposing port `8083`. The `clusterIP` is pinned explicitly (e.g. `SVC_CIDR::efac`) so the address is stable and predictable - metal-load-balancer-controller then assigns the corresponding external `SVC_CIDR::1:efac`. The same service is reused for HTTP boot and iPXE.
+- **Controllers**: enable the flavor(s) you need via `--controllers=`:
+  - HTTP boot: `httpbootconfig,serverbootconfighttp`
+  - iPXE boot: `ipxebootconfig,serverbootconfigpxe`
 
-   **HTTP boot.**
-   - **Controllers**: `httpbootconfig,serverbootconfighttp`. Reconcile `HTTPBootConfig` objects and serve them.
-   - **Bind address**: `--boot-server-address=:8083`.
-   - **Image proxy**: `--image-proxy-server-address=:8084`. Serves the OS image artifacts to provisioning servers over HTTP (separate from the HTTP-boot config endpoint on `:8083`).
-   - **Image server URL**: `--image-server-url=http://[SVC_CIDR::1:efac]:8083/httpboot`. This is what boot-operator embeds into `HTTPBootConfig` resources - it must be the **external** LB address, because bare metal servers being provisioned reach it from outside the cluster network.
-   - **Default OS image**: `--default-httpboot-oci-image=ghcr.io/ironcore-dev/gardenlinux:2150.0.0-metal`. (Older deployments use `--default-httpboot-uki-url=http://[<lb>]:8083/httpboot/gl-uki.efi` pointing at a UKI - the flag is deprecated in favour of the OCI variant but still works.)
+  Prefer one flavor per environment: enabling both is racy on current boot-operator releases (see [boot-operator#292](https://github.com/ironcore-dev/boot-operator/pull/292)) and dual-mode support may be dropped upstream.
 
-   **iPXE boot.**
-   - **Controllers**: `ipxebootconfig,serverbootconfigpxe`. Reconcile `IPXEBootConfig` objects and serve them.
-   - **iPXE service URL**: `--ipxe-service-url=http://[SVC_CIDR::1:efac]:8083`. Setting this directly is the simplest path - it overrides the default `--ipxe-service-port=5000` and the `IPXE_SERVER_ADDRESS` env-var fallback. Must be the **external** LB address, same reason as above.
-2. **metal-operator** - BMC discovery and lifecycle. Applied via kustomize on top of [metal-operator](https://github.com/ironcore-dev/metal-operator) v0.7.1 (`config/default`) with these additions/patches:
-   - **MAC prefix DB**: The `oob-mac-prefixes-<zone>.yaml` file (see [Prerequisites](#prerequisites-before-running-any-phase)) is generated as a `macdb` Secret in the `metal-operator-system` namespace and mounted at `/etc/macdb/macdb.yaml`.
-   - **`hostNetwork: true`**: The controller talks to BMCs directly on the OOB network; it must run on the host's network namespace, not through the CNI. Deployment strategy set to `Recreate` (only one instance can bind the host ports).
-   - **Registry service**: A dedicated `metal-registry-service` of type `LoadBalancer`, port `30010` -> target `10000` (the manager's discovery registry). The `clusterIP` is pinned (e.g. `SVC_CIDR::cafe`) so the external LB address is `SVC_CIDR::1:cafe`. `--registry-url` is set to that external address so probing servers - which sit outside the cluster network - can reach the registry during first-boot discovery.
-   - **Controller args**:
-     - `--mac-prefixes-file=/etc/macdb/macdb.yaml` - path to the mounted MAC DB.
-     - `--probe-image=ghcr.io/ironcore-dev/metalprobe:<tag>` - the probe binary/image pulled by servers being inspected.
-     - `--probe-os-image=ghcr.io/ironcore-dev/gardenlinux:2150.0.0-metal` - OS image used by the probe phase.
-     - `--registry-url=http://[SVC_CIDR::1:cafe]:30010` - external LB URL of `metal-registry-service`, embedded into probe workflows. Must be the **external** LB address, same reason as boot-operator. This registry is the endpoint a server posts its hardware capabilities back to during the probe phase; metal-operator consumes those posted capabilities to populate the `Server` resource's `.status` (inventory, CPU, memory, storage, NICs), which is what drives a server from discovery into the `Available` state a `ServerClaim` can bind.
-   - **Boot behavior**: metal-operator runs with `--enforce-first-boot=true` from the start (needed for mgmt-1 in Phase 6, see [6.3](#63-wait-for-server-discovery)); any mgmt server that is already powered on at discovery time will be power-cycled into its first boot.
+**HTTP boot.**
+- **Controllers**: `httpbootconfig,serverbootconfighttp`. Reconcile `HTTPBootConfig` objects and serve them.
+- **Bind address**: `--boot-server-address=:8083`.
+- **Image proxy**: `--image-proxy-server-address=:8084`. Serves the OS image artifacts to provisioning servers over HTTP (separate from the HTTP-boot config endpoint on `:8083`).
+- **Image server URL**: `--image-server-url=http://[SVC_CIDR::1:efac]:8083/httpboot`. This is what boot-operator embeds into `HTTPBootConfig` resources - it must be the **external** LB address, because bare metal servers being provisioned reach it from outside the cluster network.
+- **Default OS image**: `--default-httpboot-oci-image=ghcr.io/ironcore-dev/gardenlinux:2150.0.0-metal`. (Older deployments use `--default-httpboot-uki-url=http://[<lb>]:8083/httpboot/gl-uki.efi` pointing at a UKI - the flag is deprecated in favour of the OCI variant but still works.)
+
+**iPXE boot.**
+- **Controllers**: `ipxebootconfig,serverbootconfigpxe`. Reconcile `IPXEBootConfig` objects and serve them.
+- **iPXE service URL**: `--ipxe-service-url=http://[SVC_CIDR::1:efac]:8083`. Setting this directly is the simplest path - it overrides the default `--ipxe-service-port=5000` and the `IPXE_SERVER_ADDRESS` env-var fallback. Must be the **external** LB address, same reason as above.
+
+#### 2.3.2 metal-operator
+
+BMC discovery and lifecycle. Applied via kustomize on top of [metal-operator](https://github.com/ironcore-dev/metal-operator) v0.7.1 (`config/default`) with these additions/patches:
+- **MAC prefix DB**: The `oob-mac-prefixes-<zone>.yaml` file (see [Prerequisites](#prerequisites-before-running-any-phase)) is generated as a `macdb` Secret in the `metal-operator-system` namespace and mounted at `/etc/macdb/macdb.yaml`.
+- **`hostNetwork: true`**: The controller talks to BMCs directly on the OOB network; it must run on the host's network namespace, not through the CNI. Deployment strategy set to `Recreate` (only one instance can bind the host ports).
+- **Registry service**: A dedicated `metal-registry-service` of type `LoadBalancer`, port `30010` -> target `10000` (the manager's discovery registry). The `clusterIP` is pinned (e.g. `SVC_CIDR::cafe`) so the external LB address is `SVC_CIDR::1:cafe`. `--registry-url` is set to that external address so probing servers - which sit outside the cluster network - can reach the registry during first-boot discovery.
+- **Controller args**:
+  - `--mac-prefixes-file=/etc/macdb/macdb.yaml` - path to the mounted MAC DB.
+  - `--probe-image=ghcr.io/ironcore-dev/metalprobe:<tag>` - the probe binary/image pulled by servers being inspected.
+  - `--probe-os-image=ghcr.io/ironcore-dev/gardenlinux:2150.0.0-metal` - OS image used by the probe phase.
+  - `--registry-url=http://[SVC_CIDR::1:cafe]:30010` - external LB URL of `metal-registry-service`, embedded into probe workflows. Must be the **external** LB address, same reason as boot-operator. This registry is the endpoint a server posts its hardware capabilities back to during the probe phase; metal-operator consumes those posted capabilities to populate the `Server` resource's `.status` (inventory, CPU, memory, storage, NICs), which is what drives a server from discovery into the `Available` state a `ServerClaim` can bind.
+- **Boot behavior**: metal-operator runs with `--enforce-first-boot=true` from the start (needed for mgmt-1 in Phase 6, see [6.3](#_6-3-wait-for-server-discovery)); any mgmt server that is already powered on at discovery time will be power-cycled into its first boot.
 
 ### 2.4 Data plane and services
 
-1. **FeDHCP** - OOB and inband DHCPv6 servers. Two separate deployments, one per network plane. The pods listen on UDP `1547` (FeDHCP runs unprivileged and cannot bind the privileged port 547), while each `LoadBalancer` service keeps the standard DHCPv6 port `547` on the front and forwards to `1547` on the pod. That way the switch DHCP relays only need to know the service IP - the port is the well-known DHCPv6 one. The switches **must be configured** to relay to these well-known addresses: **OOB switch ports** relay DHCPv6 to `SVC_CIDR::1:1547` (the OOB FeDHCP LB), and **inband switch ports** relay to `SVC_CIDR::1:547` (the inband FeDHCP LB). Applied via kustomize on top of [FeDHCP](https://github.com/ironcore-dev/FeDHCP) v0.8.7 (`config/default`).
+#### 2.4.1 FeDHCP
 
-    **OOB (BMC discovery network).**
-    - **Service**: `LoadBalancer`, `clusterIP` pinned to `SVC_CIDR::1547` -> external `SVC_CIDR::1:1547`. This is the well-known FeDHCP address the switch DHCP relays point at (see [Prerequisites](#prerequisites-before-running-any-phase)).
-    - **Plugins enabled** (in order):
-      1. `server_id` - DHCPv6 server DUID.
-      2. `searchdomains` - DNS search domains to hand out.
-      3. `dns` - upstream resolvers (public DNS64).
-      4. `ntp` - NTP servers, from `ntp-config.yaml`.
-      5. `stateless` - stateless address configuration.
-      6. `metal` - matches incoming DHCP requests by client MAC against `metal-config-<zone>.yaml` (mgmt-2 only at this stage) and creates an `Endpoint` CR (an IronCore metal-operator CRD) for each seen client MAC. metal-operator reconciles those `Endpoint`s and drives the BMC discovery flow from there (see [metal-operator architecture](https://ironcore.dev/metal-operator/architecture.html)). This is why a BMC's DHCPv6 request is the trigger for discovery, not the DHCP lease itself.
-      7. `leases` - lease bookkeeping, from `leases-config.yaml`.
-    - **ConfigMaps**: The OOB kustomization applies a `nameSuffix: -oob`, so the generated ConfigMaps are `metal-config-oob`, `leases-config-oob`, and `ntp-config-oob`, and the deployment is `fedhcp-oob` (all referenced with these suffixed names). FeDHCP's main `config` ConfigMap is likewise suffixed. Generated via `configMapGenerator`. The `-oob`-suffixed names are what [6.2](#62-update-discovery-configuration) updates with the full mgmt server MAC set.
+OOB and inband DHCPv6 servers. Two separate deployments, one per network plane. The pods listen on UDP `1547` (FeDHCP runs unprivileged and cannot bind the privileged port 547), while each `LoadBalancer` service keeps the standard DHCPv6 port `547` on the front and forwards to `1547` on the pod. That way the switch DHCP relays only need to know the service IP - the port is the well-known DHCPv6 one. The switches **must be configured** to relay to these well-known addresses: **OOB switch ports** relay DHCPv6 to `SVC_CIDR::1:1547` (the OOB FeDHCP LB), and **inband switch ports** relay to `SVC_CIDR::1:547` (the inband FeDHCP LB). Applied via kustomize on top of [FeDHCP](https://github.com/ironcore-dev/FeDHCP) v0.8.7 (`config/default`).
 
-    **Inband (data network).**
-    - **Service**: `LoadBalancer`, `clusterIP` pinned to `SVC_CIDR::547` -> external `SVC_CIDR::1:547`.
-    - **Plugins enabled** (in order):
-      1. `server_id` - DHCPv6 server DUID (different from OOB).
-      2. `dns` - cluster CoreDNS + public DNS64 fallbacks.
-      3. `ntp` - same NTP config as OOB.
-      4. `stateless` - stateless address configuration.
-      5. `httpboot` - returns the boot-operator HTTP boot URL, from `httpboot-config.yaml` (points at `http://[SVC_CIDR::1:efac]:8083/httpboot`).
-      6. `leases` - lease bookkeeping.
-    - **ConfigMaps**: All plugin config files (`httpboot-config`, `leases-config`, `ntp-config`) and FeDHCP's main `config` are generated via `configMapGenerator`.
-    - **PXE / iPXE variant**: For iPXE boot instead of HTTP boot, replace the `httpboot` plugin with the `pxeboot` plugin. Configure it with the TFTP server address serving the iPXE loader and the iPXE script URL the loader should chainload, `http://[SVC_CIDR::1:efac]:8083/ipxe` (served by boot-operator, see [2.3](#23-metal-control-plane)). iPXE additionally requires a TFTP server serving the iPXE binary from [ipxe.org](https://ipxe.org/) - FeDHCP hands out the boot filename via `pxeboot`, and the client fetches the iPXE loader over TFTP before chainloading over HTTP to that URL.
-2. **metaldata** - instance metadata service, reachable at `metaldata.example.com` (rewritten by CoreDNS - see [CoreDNS](#24-data-plane-and-services)). At first provisioning, the OS image's Ignition config queries this service's v1 API (`/v1`, with a `Metadata-Flavor: IronCore Metal` request header) to fetch the node's per-host metadata - primarily its `server-name` (`<type>-<zone>-<index>`, e.g. `mgmt-zone1-1`) and IPv6 `prefix`. The host's first-boot logic then derives the hostname, zone, and index from `server-name` and renders FRR/BGP config, hostname, and network interface files from that metadata. Without metaldata, first-boot provisioning cannot complete. Since metal-operator v0.7.1 the metaldata DaemonSet is bundled inside metal-operator, so the service runs in the `metal-operator-system` namespace as Service `metal-operator-metaldata`. Applied via kustomize on top of [metal-operator](https://github.com/ironcore-dev/metal-operator) v0.7.1.
+**OOB (BMC discovery network).**
+- **Service**: `LoadBalancer`, `clusterIP` pinned to `SVC_CIDR::1547` -> external `SVC_CIDR::1:1547`. This is the well-known FeDHCP address the switch DHCP relays point at (see [Prerequisites](#prerequisites-before-running-any-phase)).
+- **Plugins enabled** (in order):
+  1. `server_id` - DHCPv6 server DUID.
+  2. `searchdomains` - DNS search domains to hand out.
+  3. `dns` - upstream resolvers (public DNS64).
+  4. `ntp` - NTP servers, from `ntp-config.yaml`.
+  5. `stateless` - stateless address configuration.
+  6. `metal` - matches incoming DHCP requests by client MAC against `metal-config-<zone>.yaml` (mgmt-2 only at this stage) and creates an `Endpoint` CR (an IronCore metal-operator CRD) for each seen client MAC. metal-operator reconciles those `Endpoint`s and drives the BMC discovery flow from there (see [metal-operator architecture](https://ironcore.dev/metal-operator/architecture.html)). This is why a BMC's DHCPv6 request is the trigger for discovery, not the DHCP lease itself.
+  7. `leases` - lease bookkeeping, from `leases-config.yaml`.
+- **ConfigMaps**: The OOB kustomization applies a `nameSuffix: -oob`, so the generated ConfigMaps are `metal-config-oob`, `leases-config-oob`, and `ntp-config-oob`, and the deployment is `fedhcp-oob` (all referenced with these suffixed names). FeDHCP's main `config` ConfigMap is likewise suffixed. Generated via `configMapGenerator`. The `-oob`-suffixed names are what [6.2](#_6-2-update-discovery-configuration) updates with the full mgmt server MAC set.
 
-   - **User-defined metadata attributes**: Beyond the built-in fields, the operator can attach arbitrary key-value pairs to the response by annotating (or labeling) the `Server` resource with `metadata.metal.ironcore.dev/<key>: <value>`; every such key is surfaced as a top-level field in the `/v1/` JSON (and individually at `/v1/<key>`). A separate `user-data` map (served at `/v1/user-data` and `/v1/user-data/<key>`) is delivered through the `ServerClaim`'s `UserDataRef`, which points at a `Secret` holding the user-data - this is also how a fully-rendered Ignition can be handed to a host via `ignition.config.url=metaldata.example.com/v1/user-data/ignition` on the kernel cmdline. The bootstrap roles only consume the built-in `server-name`/`prefix` fields, but custom first-boot logic can rely on these user attributes the same way. See [IEP-18](https://github.com/ironcore-dev/enhancements/blob/main/ieps/18-metaldata.md) for the full API.
-3. **metal-load-balancer-controller** (MLBc) - announces `LoadBalancer` service IPs via BGP/FRR. Maps each `SVC_CIDR::XYZ` cluster IP to a publicly routable `SVC_CIDR::1:XYZ` address (see [1.3](#13-post-install)). Applied via kustomize on top of the latest release of [metal-load-balancer-controller](https://github.com/ironcore-dev/metal-load-balancer-controller) (`config/default`) with these additions/patches:
-   - **Manager on the host network**: `hostNetwork: true` and `hostPID: true` so the controller can peer with the host's FRR instance (set up as part of the network prerequisites) and announce the external LB addresses over the fabric BGP session.
-   - **Metalbond speaker disabled**: The upstream chart ships a `metal-load-balancer-speaker-controller` DaemonSet (for setups that use metalbond to announce LB IPs). We announce via the fabric BGP directly, so this DaemonSet is deleted via a kustomize `$patch: delete`.
-   - **Controller args**:
-     - `--allocate-node-cidr=false` - node pod CIDRs are handled by the cloud-controller-manager on the CAPI cluster (see [Phase 4](#phase-4-deploy-metal-stack-on-capi-cluster)); on the bootstrap cluster they are patched manually ([1.3](#13-post-install)). MLBc itself does not touch pod CIDRs.
-4. **CoreDNS** - replace the default cluster DNS with an IronCore-tuned Corefile. Deployed by patching the existing `kube-system/coredns` ConfigMap (kustomize `configMapGenerator` for the `Corefile` key) and switching the `kube-dns` service to `LoadBalancer` so it gets an external IP announced via BGP. Cluster IP stays `SVC_CIDR::a`, external LB becomes `SVC_CIDR::1:a` (see [1.3](#13-post-install)).
+**Inband (data network).**
+- **Service**: `LoadBalancer`, `clusterIP` pinned to `SVC_CIDR::547` -> external `SVC_CIDR::1:547`.
+- **Plugins enabled** (in order):
+  1. `server_id` - DHCPv6 server DUID (different from OOB).
+  2. `dns` - cluster CoreDNS + public DNS64 fallbacks.
+  3. `ntp` - same NTP config as OOB.
+  4. `stateless` - stateless address configuration.
+  5. `httpboot` - returns the boot-operator HTTP boot URL, from `httpboot-config.yaml` (points at `http://[SVC_CIDR::1:efac]:8083/httpboot`).
+  6. `leases` - lease bookkeeping.
+- **ConfigMaps**: All plugin config files (`httpboot-config`, `leases-config`, `ntp-config`) and FeDHCP's main `config` are generated via `configMapGenerator`.
+- **PXE / iPXE variant**: For iPXE boot instead of HTTP boot, replace the `httpboot` plugin with the `pxeboot` plugin. Configure it with the TFTP server address serving the iPXE loader and the iPXE script URL the loader should chainload, `http://[SVC_CIDR::1:efac]:8083/ipxe` (served by boot-operator, see [2.3](#_2-3-metal-control-plane)). iPXE additionally requires a TFTP server serving the iPXE binary from [ipxe.org](https://ipxe.org/) - FeDHCP hands out the boot filename via `pxeboot`, and the client fetches the iPXE loader over TFTP before chainloading over HTTP to that URL.
 
-    Key Corefile differences from the upstream default:
-    - **k8s_external for the zone domain**: `k8s_external <zone>.example.com` - lets DNS resolve `<svc>.<ns>.<zone>.example.com` from outside the cluster (via the external LB IP of the service). Used by the DNS rewrites below.
-    - **DNS64 upstreams**: `forward . 2001:4860:4860::6464 2001:4860:4860::64` - IPv6-only hosts resolve IPv4 destinations through Google Public DNS64.
-    - **Cache exceptions**: `cache 30 { disable success cluster.local; disable denial cluster.local }` - never cache in-cluster lookups (avoids stale results across pod restarts).
-    - **Rewrites for well-known bootstrap names**:
-      - `rewrite name boot.onmetal.de boot-operator-service.boot-operator-system.<zone>.example.com` - the domain `boot.onmetal.de` is **hard-coded into the GardenLinux UKI images**, so HTTP boot needs this rewrite to reach boot-operator. Can be dropped if you only use PXE (iPXE) boot instead of HTTP boot with UKI images.
-      - `rewrite name metaldata.example.com metal-operator-metaldata.metal-operator-system.<zone>.example.com` - first-boot Ignition resolves the metadata service (see [metaldata](#24-data-plane-and-services)). The metal-operator kustomize applies `namePrefix: metal-operator-`, so the bundled DaemonSet's Service is `metal-operator-metaldata` (namespace `metal-operator-system`, from metal-operator v0.7.1 onwards).
+#### 2.4.2 metaldata
+
+instance metadata service, reachable at `metaldata.example.com` (rewritten by CoreDNS - see [CoreDNS](#_2-4-4-coredns)). At first provisioning, the OS image's Ignition config queries this service's v1 API (`/v1`, with a `Metadata-Flavor: IronCore Metal` request header) to fetch the node's per-host metadata - primarily its `server-name` (`<type>-<zone>-<index>`, e.g. `mgmt-zone1-1`) and IPv6 `prefix`. The host's first-boot logic then derives the hostname, zone, and index from `server-name` and renders FRR/BGP config, hostname, and network interface files from that metadata. Without metaldata, first-boot provisioning cannot complete. Since metal-operator v0.7.1 the metaldata DaemonSet is bundled inside metal-operator, so the service runs in the `metal-operator-system` namespace as Service `metal-operator-metaldata`. Applied via kustomize on top of [metal-operator](https://github.com/ironcore-dev/metal-operator) v0.7.1.
+
+- **User-defined metadata attributes**: Beyond the built-in fields, the operator can attach arbitrary key-value pairs to the response by annotating (or labeling) the `Server` resource with `metadata.metal.ironcore.dev/<key>: <value>`; every such key is surfaced as a top-level field in the `/v1/` JSON (and individually at `/v1/<key>`). A separate `user-data` map (served at `/v1/user-data` and `/v1/user-data/<key>`) is delivered through the `ServerClaim`'s `UserDataRef`, which points at a `Secret` holding the user-data - this is also how a fully-rendered Ignition can be handed to a host via `ignition.config.url=metaldata.example.com/v1/user-data/ignition` on the kernel cmdline. The bootstrap roles only consume the built-in `server-name`/`prefix` fields, but custom first-boot logic can rely on these user attributes the same way. See [IEP-18](https://github.com/ironcore-dev/enhancements/blob/main/ieps/18-metaldata.md) for the full API.
+
+#### 2.4.3 metal-load-balancer-controller (MLBc)
+
+announces `LoadBalancer` service IPs via BGP/FRR. Maps each `SVC_CIDR::XYZ` cluster IP to a publicly routable `SVC_CIDR::1:XYZ` address (see [1.3](#_1-3-post-install)). Applied via kustomize on top of the latest release of [metal-load-balancer-controller](https://github.com/ironcore-dev/metal-load-balancer-controller) (`config/default`) with these additions/patches:
+- **Manager on the host network**: `hostNetwork: true` and `hostPID: true` so the controller can peer with the host's FRR instance (set up as part of the network prerequisites) and announce the external LB addresses over the fabric BGP session.
+- **Metalbond speaker disabled**: The upstream chart ships a `metal-load-balancer-speaker-controller` DaemonSet (for setups that use metalbond to announce LB IPs). We announce via the fabric BGP directly, so this DaemonSet is deleted via a kustomize `$patch: delete`.
+- **Controller args**:
+  - `--allocate-node-cidr=false` - node pod CIDRs are handled by the cloud-controller-manager on the CAPI cluster (see [Phase 4](#phase-4-deploy-metal-stack-on-capi-cluster)); on the bootstrap cluster they are patched manually ([1.3](#_1-3-post-install)). MLBc itself does not touch pod CIDRs.
+
+#### 2.4.4 CoreDNS
+
+replace the default cluster DNS with an IronCore-tuned Corefile. Deployed by patching the existing `kube-system/coredns` ConfigMap (kustomize `configMapGenerator` for the `Corefile` key) and switching the `kube-dns` service to `LoadBalancer` so it gets an external IP announced via BGP. Cluster IP stays `SVC_CIDR::a`, external LB becomes `SVC_CIDR::1:a` (see [1.3](#_1-3-post-install)).
+
+Key Corefile differences from the upstream default:
+- **k8s_external for the zone domain**: `k8s_external <zone>.example.com` - lets DNS resolve `<svc>.<ns>.<zone>.example.com` from outside the cluster (via the external LB IP of the service). Used by the DNS rewrites below.
+- **DNS64 upstreams**: `forward . 2001:4860:4860::6464 2001:4860:4860::64` - IPv6-only hosts resolve IPv4 destinations through Google Public DNS64.
+- **Cache exceptions**: `cache 30 { disable success cluster.local; disable denial cluster.local }` - never cache in-cluster lookups (avoids stale results across pod restarts).
+- **Rewrites for well-known bootstrap names**:
+  - `rewrite name boot.onmetal.de boot-operator-service.boot-operator-system.<zone>.example.com` - the domain `boot.onmetal.de` is **hard-coded into the GardenLinux UKI images**, so HTTP boot needs this rewrite to reach boot-operator. Can be dropped if you only use PXE (iPXE) boot instead of HTTP boot with UKI images.
+  - `rewrite name metaldata.example.com metal-operator-metaldata.metal-operator-system.<zone>.example.com` - first-boot Ignition resolves the metadata service (see [metaldata](#_2-4-2-metaldata)). The metal-operator kustomize applies `namePrefix: metal-operator-`, so the bundled DaemonSet's Service is `metal-operator-metaldata` (namespace `metal-operator-system`, from metal-operator v0.7.1 onwards).
 
 > **Checkpoint.** The bootstrap cluster runs the full IronCore metal stack: Calico, cert-manager, CAPI core + IronCore metal provider, boot-operator, metal-operator (with bundled metaldata), MLBc, FeDHCP, and CoreDNS. Servers begin appearing as `Server` resources as their BMCs are discovered.
 >
@@ -309,7 +338,7 @@ At this stage only **mgmt-2** is listed in `metal-config-<zone>.yaml` (FeDHCP) a
 
 ## Phase 3: Create CAPI Cluster
 
-Use the bootstrap cluster to provision the *real* management cluster on mgmt-2 via CAPI. Once mgmt-2 is discovered as a `Server` resource (see [3.1](#31-prepare-the-server-resource)), it boots the GardenLinux CAPI image (provided by boot-operator via HTTPBoot from [2.3](#23-metal-control-plane)), the kubeadm bootstrap provider drops an Ignition userdata onto it, and `kubeadm init` brings up a single-node CAPI-managed control plane. Its API becomes reachable at the zone's external API address (`SVC_CIDR::1:1`) once the node announces it via BGP (see [3.3](#33-ignition-userdata)), and we fetch its kubeconfig for the next phases.
+Use the bootstrap cluster to provision the *real* management cluster on mgmt-2 via CAPI. Once mgmt-2 is discovered as a `Server` resource (see [3.1](#_3-1-prepare-the-server-resource)), it boots the GardenLinux CAPI image (provided by boot-operator via HTTPBoot from [2.3](#_2-3-metal-control-plane)), the kubeadm bootstrap provider drops an Ignition userdata onto it, and `kubeadm init` brings up a single-node CAPI-managed control plane. Its API becomes reachable at the zone's external API address (`SVC_CIDR::1:1`) once the node announces it via BGP (see [3.3](#_3-3-ignition-userdata)), and we fetch its kubeconfig for the next phases.
 
 For the CAPI resource model refer to the upstream docs:
 
@@ -337,7 +366,7 @@ Wait for mgmt-2's `Server` resource to reach `state: Available` on the bootstrap
 
 Then annotate and label it:
 
-- **`metadata.metal.ironcore.dev/prefix`.** The per-host `/64` prefix consumed by the metal CAPI provider when it renders the machine's cloud-init/Ignition userdata. For mgmt-2: `prefix: 2001:db8:1111:2::/64` (see [Prerequisites](#prerequisites-before-running-any-phase)). The node's `/128` loopback is derived from this prefix by the CCM (its `::1` address, see [4.2.1](#421-cloud-controller-manager)). The prefix feeds the same metaldata service the host queries on first boot (see [metaldata](#24-data-plane-and-services)); the FRR template on the node substitutes it into its BGP config.
+- **`metadata.metal.ironcore.dev/prefix`.** The per-host `/64` prefix consumed by the metal CAPI provider when it renders the machine's cloud-init/Ignition userdata. For mgmt-2: `prefix: 2001:db8:1111:2::/64` (see [Prerequisites](#prerequisites-before-running-any-phase)). The node's `/128` loopback is derived from this prefix by the CCM (its `::1` address, see [4.2.1](#_4-2-1-cloud-controller-manager)). The prefix feeds the same metaldata service the host queries on first boot (see [metaldata](#_2-4-2-metaldata)); the FRR template on the node substitutes it into its BGP config.
 - **`type=mgmt` and `clusterapi-controlplane=` labels**: The `IroncoreMetalMachineTemplate` uses `serverSelector.matchLabels: {clusterapi-controlplane: ""}` to pick eligible Servers. Set both explicitly - `type=mgmt` is informational, `clusterapi-controlplane=` is what selects the machine.
 
 ### 3.2 CAPI resources
@@ -345,19 +374,19 @@ Then annotate and label it:
 Four resources define the cluster. Apply as a single kustomization:
 
 1. **`Cluster`** - top-level CAPI object.
-   - `spec.controlPlaneEndpoint.host: SVC_CIDR::1:1`. This is the *external* API address announced by the control-plane node via BGP once its API is healthy (see [api-health-check](#33-ignition-userdata) below). Do **not** use a per-node loopback here: on scale-up in Phase 6 the endpoint must remain stable across control-plane replacements.
-   - `spec.clusterNetwork.services.cidrBlocks: [SVC_CIDR]`. **Must match the bootstrap cluster's service CIDR** ([1.2](#12-kubeadm-init)) so the switch DHCP relays and BGP announcements set up in Phase 2 keep working unchanged.
+   - `spec.controlPlaneEndpoint.host: SVC_CIDR::1:1`. This is the *external* API address announced by the control-plane node via BGP once its API is healthy (see [api-health-check](#_3-3-ignition-userdata) below). Do **not** use a per-node loopback here: on scale-up in Phase 6 the endpoint must remain stable across control-plane replacements.
+   - `spec.clusterNetwork.services.cidrBlocks: [SVC_CIDR]`. **Must match the bootstrap cluster's service CIDR** ([1.2](#_1-2-kubeadm-init)) so the switch DHCP relays and BGP announcements set up in Phase 2 keep working unchanged.
 2. **`IroncoreMetalCluster`** - infrastructure counterpart, essentially empty. The metal provider fills in status once the endpoint is reachable.
 3. **`IroncoreMetalMachineTemplate`** - the machine spec used by the control plane.
-   - `image: ghcr.io/ironcore-dev/gardenlinux/capi:<tag>`. The **CAPI variant** of the GardenLinux image (bundles kubeadm/kubelet), distinct from the plain metal image used by the metal-operator probe phase in [2.3](#23-metal-control-plane).
-   - `serverSelector.matchLabels: {clusterapi-controlplane: ""}` - picks up the label set in [3.1](#31-prepare-the-server-resource).
+   - `image: ghcr.io/ironcore-dev/gardenlinux/capi:<tag>`. The **CAPI variant** of the GardenLinux image (bundles kubeadm/kubelet), distinct from the plain metal image used by the metal-operator probe phase in [2.3](#_2-3-metal-control-plane).
+   - `serverSelector.matchLabels: {clusterapi-controlplane: ""}` - picks up the label set in [3.1](#_3-1-prepare-the-server-resource).
 4. **`KubeadmControlPlane`** - CAPI kubeadm control-plane provider config.
    - `machineTemplate.spec.infrastructureRef` points at the `IroncoreMetalMachineTemplate` above. `deletion.nodeDeletionTimeoutSeconds: 0` and `nodeDrainTimeoutSeconds: 0` - bare metal nodes are wiped on removal, so drain/deletion timeouts are meaningless; set to zero to avoid hanging on unresponsive nodes during scale-down or replacement.
    - `replicas: 1` initially. Scaled to 3 in Phase 6 once the pivot is complete and the remaining Servers are discovered.
-   - `version: <k8s_version>` - **same minor as the bootstrap cluster** ([1.1](#11-host-preparation)); mismatches force an immediate upgrade cycle after pivot.
-   - `format: ignition` - required because the OS image consumes Ignition. Matches the `EXP_KUBEADM_BOOTSTRAP_FORMAT_IGNITION` feature gate enabled during `clusterctl init` in [2.2](#22-cluster-api).
+   - `version: <k8s_version>` - **same minor as the bootstrap cluster** ([1.1](#_1-1-host-preparation)); mismatches force an immediate upgrade cycle after pivot.
+   - `format: ignition` - required because the OS image consumes Ignition. Matches the `EXP_KUBEADM_BOOTSTRAP_FORMAT_IGNITION` feature gate enabled during `clusterctl init` in [2.2](#_2-2-cluster-api).
    - `clusterConfiguration.apiServer.certSANs`. Include `SVC_CIDR::1:1` (the external endpoint), each control-plane node's future `/128` loopback, and the DNS names for mgmt-1/2/3. Missing SANs surface as opaque TLS errors on `clusterctl move` and node join.
-   - `initConfiguration`/`joinConfiguration` kubelet args: `cloud-provider=external`, `cluster-dns=SVC_CIDR::a`, `node-ip=::`. Same rationale as the bootstrap cluster ([1.2](#12-kubeadm-init)).
+   - `initConfiguration`/`joinConfiguration` kubelet args: `cloud-provider=external`, `cluster-dns=SVC_CIDR::a`, `node-ip=::`. Same rationale as the bootstrap cluster ([1.2](#_1-2-kubeadm-init)).
    - Extra apiserver/scheduler/controller-manager args bind to `::1` (IPv6-only) and set `allocate-node-cidrs=false` (pod CIDRs come from the CCM — the cloud-controller-manager, which assigns node addresses and pod CIDRs — deployed in [Phase 4](#phase-4-deploy-metal-stack-on-capi-cluster)).
 
 ### 3.3 Ignition userdata
@@ -366,12 +395,12 @@ The control-plane Ignition config is attached to the `KubeadmControlPlane`'s `co
 
 - **Users / SSH keys**: Operator SSH keys for access to the provisioned nodes.
 - **systemd-networkd**: Two `.network` files matched by NIC name for the inband (100 Gbps, MTU 9100, DHCPv6) and OOB (10 Gbps, MTU 1500) interfaces. NIC names are hardware-specific - **adjust the `Name=` globs to match your servers**.
-- **FRR template + configure-frr.sh**: `/etc/frr/frr-template.conf` ships with `__PLACEHOLDERS__` for hostname, loopback, prefix, AS number, router-id, service range, and fabric/OOB NIC names. On first boot, `fetch-metadata.sh` pulls the metaldata v1 API (`/v1`, `Metadata-Flavor: IronCore Metal` header) into `/opt/metadata.json`, then `configure-frr.sh` parses the `server-name` (`<type>-<zone>-<index>`) from it, looks up the `type` offset, and derives the AS number and router-id from `(type_offset * 1000 + index)`; it auto-detects NICs by link speed (100000 = fabric, 10000 = OOB) and `sed`s the template into `/etc/frr/frr.conf`. See [metaldata](#24-data-plane-and-services) for what the metadata service returns.
+- **FRR template + configure-frr.sh**: `/etc/frr/frr-template.conf` ships with `__PLACEHOLDERS__` for hostname, loopback, prefix, AS number, router-id, service range, and fabric/OOB NIC names. On first boot, `fetch-metadata.sh` pulls the metaldata v1 API (`/v1`, `Metadata-Flavor: IronCore Metal` header) into `/opt/metadata.json`, then `configure-frr.sh` parses the `server-name` (`<type>-<zone>-<index>`) from it, looks up the `type` offset, and derives the AS number and router-id from `(type_offset * 1000 + index)`; it auto-detects NICs by link speed (100000 = fabric, 10000 = OOB) and `sed`s the template into `/etc/frr/frr.conf`. See [metaldata](#_2-4-2-metaldata) for what the metadata service returns.
 - **api-health-check.timer**: Runs every 10 s. Polls `https://[::1]:6443/readyz`. When healthy:
-  - Adds `SVC_CIDR::1:1/128` to `lo` and announces it via BGP - **this is what makes the CAPI cluster's control-plane endpoint reachable in the fabric**. Until this fires, `controlPlaneEndpoint.host` from [3.2](#32-capi-resources) resolves to nothing.
+  - Adds `SVC_CIDR::1:1/128` to `lo` and announces it via BGP - **this is what makes the CAPI cluster's control-plane endpoint reachable in the fabric**. Until this fires, `controlPlaneEndpoint.host` from [3.2](#_3-2-capi-resources) resolves to nothing.
   - After kubeadm finishes, a marker file `/opt/magic-file-gonzo` (touched by `postKubeadmCommands`) flips the script into "announce the whole `SVC_CIDR::/64` service range" mode. Post-pivot, this is what makes every LoadBalancer service in the CAPI cluster reachable, replacing the announcement previously done by the bootstrap host's FRR (see [Phase 4](#phase-4-deploy-metal-stack-on-capi-cluster)).
 - **`preKubeadmCommands`**: Wait for DNS, wait for the control-plane endpoint (join case only), then install kubelet/kubeadm/kubectl matching `k8s_version` from `pkgs.k8s.io`, and use `yq` to patch `advertiseAddress` in `/etc/kubeadm.yml` with the loopback IP from `/opt/ip` (written by `configure-frr.sh`). The stock kubeadm bootstrap provider does not know the loopback address; this is the workaround.
-- **containerd config**: Overrides `bin_dir`/`conf_dir` to the CRI v1 defaults. Analogous to the bootstrap cluster's containerd config in [1.1](#11-host-preparation) but adjusted for what the GardenLinux CAPI image ships with.
+- **containerd config**: Overrides `bin_dir`/`conf_dir` to the CRI v1 defaults. Analogous to the bootstrap cluster's containerd config in [1.1](#_1-1-host-preparation) but adjusted for what the GardenLinux CAPI image ships with.
 - **GardenLinux `dracut.end` hook**: First-boot disk partitioning via `systemd-repart` + `bootctl install`, then reboot. The node boots into a live ramdisk via HTTPBoot, this hook installs to the first PCI disk, and subsequent boots come off local disk. **Beware BMC virtual media** - it can appear as the first PCI disk and get wiped; unmount before provisioning.
 
 ### 3.4 Fetch the CAPI kubeconfig
@@ -401,8 +430,8 @@ Deploy the same metal stack from [Phase 2](#phase-2-deploy-metal-stack-bootstrap
 
 Before deploying onto the CAPI cluster:
 
-1. **Hand over the service-CIDR announcement from mgmt-1 to mgmt-2**: mgmt-2 has already started announcing the aggregate `SVC_CIDR::/64` - its `api-health-check` timer flips into "announce the whole service range" mode at the end of Phase 3, when `postKubeadmCommands` touches the `/opt/magic-file-gonzo` marker (see [3.3](#33-ignition-userdata)). So by the start of Phase 4 both hosts are announcing, and the overlap must be closed here. Withdrawing mgmt-1 is safe **only after confirming mgmt-2 is announcing** - otherwise no host advertises the range and every LB VIP goes dark. Sequence: (a) verify mgmt-2 announces `SVC_CIDR::/64` (check its FRR / BGP sessions); (b) comment out the `network SVC_CIDR::/64` line in `/etc/frr/frr.conf` on mgmt-1 and restart FRR; (c) confirm from the fabric that `SVC_CIDR::/64` still routes via mgmt-2 and CoreDNS at `SVC_CIDR::1:a` still answers (kubeadm already deployed it on mgmt-2). mgmt-2 sole-announcing while FeDHCP/boot-operator/metal-operator are still at zero replicas is fine - no provisioning happens until Phase 6, and the CAPI API (`SVC_CIDR::1:1`, a `/128` announced solely by mgmt-2) is unaffected by the aggregate handover.
-2. **Use the CAPI kubeconfig**: Reuse the `/etc/kubernetes/capi.kubeconfig` fetched in [3.4](#34-fetch-the-capi-kubeconfig); it targets the CAPI cluster's API at `[SVC_CIDR::1:1]:6443`.
+1. **Hand over the service-CIDR announcement from mgmt-1 to mgmt-2**: mgmt-2 has already started announcing the aggregate `SVC_CIDR::/64` - its `api-health-check` timer flips into "announce the whole service range" mode at the end of Phase 3, when `postKubeadmCommands` touches the `/opt/magic-file-gonzo` marker (see [3.3](#_3-3-ignition-userdata)). So by the start of Phase 4 both hosts are announcing, and the overlap must be closed here. Withdrawing mgmt-1 is safe **only after confirming mgmt-2 is announcing** - otherwise no host advertises the range and every LB VIP goes dark. Sequence: (a) verify mgmt-2 announces `SVC_CIDR::/64` (check its FRR / BGP sessions); (b) comment out the `network SVC_CIDR::/64` line in `/etc/frr/frr.conf` on mgmt-1 and restart FRR; (c) confirm from the fabric that `SVC_CIDR::/64` still routes via mgmt-2 and CoreDNS at `SVC_CIDR::1:a` still answers (kubeadm already deployed it on mgmt-2). mgmt-2 sole-announcing while FeDHCP/boot-operator/metal-operator are still at zero replicas is fine - no provisioning happens until Phase 6, and the CAPI API (`SVC_CIDR::1:1`, a `/128` announced solely by mgmt-2) is unaffected by the aggregate handover.
+2. **Use the CAPI kubeconfig**: Reuse the `/etc/kubernetes/capi.kubeconfig` fetched in [3.4](#_3-4-fetch-the-capi-kubeconfig); it targets the CAPI cluster's API at `[SVC_CIDR::1:1]:6443`.
 3. **Wait for the CAPI API to respond**: Verify `KUBECONFIG=/etc/kubernetes/capi.kubeconfig kubectl get nodes` succeeds before proceeding.
 
 ### 4.2 Deployment differences from Phase 2
@@ -420,12 +449,12 @@ Additionally, the play overrides the `KUBECONFIG` variable to `capi.kubeconfig` 
 
 ### 4.2.1 Cloud Controller Manager
 
-`bootstrap_install_ccm: true` brings in the cloud-controller-manager (metal-cloud-controller-manager, v0.6.0), which was not deployed on the bootstrap cluster. It assigns node addresses and pod CIDRs on the CAPI cluster by matching nodes to `IroncoreMetalMachine` objects (nodes here carry a `providerID` set by the metal CAPI provider, which the bootstrap node lacked). Node addresses are computed from the `metadata.metal.ironcore.dev/prefix` annotation on the `Server` resource ([3.1](#31-prepare-the-server-resource)) - the node's loopback / `INTERNAL-IP` is the `::1` of that `/64`. Applied via kustomize on top of `github.com/ironcore-dev/cloud-provider-metal` with these patches:
+`bootstrap_install_ccm: true` brings in the cloud-controller-manager (metal-cloud-controller-manager, v0.6.0), which was not deployed on the bootstrap cluster. It assigns node addresses and pod CIDRs on the CAPI cluster by matching nodes to `IroncoreMetalMachine` objects (nodes here carry a `providerID` set by the metal CAPI provider, which the bootstrap node lacked). Node addresses are computed from the `metadata.metal.ironcore.dev/prefix` annotation on the `Server` resource ([3.1](#_3-1-prepare-the-server-resource)) - the node's loopback / `INTERNAL-IP` is the `::1` of that `/64`. Applied via kustomize on top of `github.com/ironcore-dev/cloud-provider-metal` with these patches:
 
 - `metal-kubeconfig` Secret containing the kubeconfig of the metal API cluster, mounted at `/etc/metal/metal-kubeconfig`. In Phase 4 this is created from the bootstrap cluster's `/etc/kubernetes/admin.conf`, so it points at the **bootstrap cluster** as the metal API (the `IroncoreMetalMachine` CRs the CCM matches against still live there until [Phase 5](#phase-5-pivot-clusterctl-move) moves them over). It is switched to the CAPI cluster's `capi.kubeconfig` in [Phase 6](#phase-6-scale-to-3-control-plane-nodes), after the pivot.
-- `cloud-provider-config` ConfigMap with `cloudprovider.conf`: `clusterName: mgmt-<zone>` (matching the CAPI `Cluster` name from [3.2](#32-capi-resources)) and `networking.configureNodeAddresses: true`.
+- `cloud-provider-config` ConfigMap with `cloudprovider.conf`: `clusterName: mgmt-<zone>` (matching the CAPI `Cluster` name from [3.2](#_3-2-capi-resources)) and `networking.configureNodeAddresses: true`.
 - Extra args: `--metal-kubeconfig=/etc/metal/metal-kubeconfig` (path to the metal API cluster kubeconfig), `--metal-namespace=capi-provider-ironcore-metal-system` (namespace where the metal CRDs live), `--cloud-config=/etc/kubernetes/cloudprovider/cloudprovider.conf`, `--configure-cloud-routes=false`.
-- Zone-specific args: `--cluster-cidr=SVC_CIDR` (the cluster's service range, used by the CCM to distinguish cluster-internal addresses) and `--pod-prefix-size=112` (the size of the `podCIDR` the CCM assigns per node - a `/112` carved out of each node's `/64` host BGP range and offset to `::1:0` to avoid the node's `::1` loopback, e.g. `2001:db8:1111:2::1:0/112` for mgmt-2 from [1.3](#13-post-install); the host BGP prefix itself stays a `/64`).
+- Zone-specific args: `--cluster-cidr=SVC_CIDR` (the cluster's service range, used by the CCM to distinguish cluster-internal addresses) and `--pod-prefix-size=112` (the size of the `podCIDR` the CCM assigns per node - a `/112` carved out of each node's `/64` host BGP range and offset to `::1:0` to avoid the node's `::1` loopback, e.g. `2001:db8:1111:2::1:0/112` for mgmt-2 from [1.3](#_1-3-post-install); the host BGP prefix itself stays a `/64`).
 
 ### 4.3 What this achieves
 
@@ -461,13 +490,13 @@ The cluster is ready to receive the CAPI resources via `clusterctl move` in Phas
 
 Move all CAPI and IronCore metal resources from the bootstrap cluster to the CAPI cluster so it becomes fully self-managing. After this phase, the bootstrap cluster on mgmt-1 is no longer needed - it gets torn down and the server is reprovisioned by CAPI as a regular control-plane node in Phase 6.
 
-`clusterctl move` transfers CAPI objects (Cluster, Machine, KubeadmControlPlane, etc.) and any resources whose CRDs are labelled for move. However it does **not** move status subresources - both `Server` status (hardware inventory, power state) and `ServerClaim` status (the `Bound` phase linking a claim to its server) arrive empty on the target. Both must be restored manually after the move, before scaling up controllers (see [5.3](#53-restore-status)).
+`clusterctl move` transfers CAPI objects (Cluster, Machine, KubeadmControlPlane, etc.) and any resources whose CRDs are labelled for move. However it does **not** move status subresources - both `Server` status (hardware inventory, power state) and `ServerClaim` status (the `Bound` phase linking a claim to its server) arrive empty on the target. Both must be restored manually after the move, before scaling up controllers (see [5.3](#_5-3-restore-status)).
 
 ### 5.1 Prepare the bootstrap cluster
 
 1. **Scale down metal-operator, boot-operator, and FeDHCP on the bootstrap cluster**: Each is stopped for a distinct reason:
    - **metal-operator and boot-operator** reconcile IronCore CRs and must be stopped before the move - if they're running while `clusterctl move` deletes the source objects, they may react to the deletion (e.g. power off a server, release a claim).
-   - **FeDHCP** (both planes) is scaled down because the CAPI cluster brings up its own FeDHCP in [5.4](#54-scale-up-controllers-on-capi-cluster). With both clusters serving DHCPv6 on the same relayed OOB and inband networks, two live servers would hand out conflicting/duplicate leases.
+   - **FeDHCP** (both planes) is scaled down because the CAPI cluster brings up its own FeDHCP in [5.4](#_5-4-scale-up-controllers-on-capi-cluster). With both clusters serving DHCPv6 on the same relayed OOB and inband networks, two live servers would hand out conflicting/duplicate leases.
 
    Scale all four to zero:
    - `metal-operator-system/metal-operator-controller-manager`
@@ -480,7 +509,7 @@ Move all CAPI and IronCore metal resources from the bootstrap cluster to the CAP
    kubectl --kubeconfig /etc/kubernetes/admin.conf label crd <crd-name> clusterctl.cluster.x-k8s.io/move= clusterctl.cluster.x-k8s.io= --overwrite
    ```
 
-3. **Capture the Server and ServerClaim objects (full JSON)**: From the bootstrap cluster, save the mgmt-2 `Server` resource and the `ServerClaim` that binds it to the CAPI machine - both including their `.status`. They are the only Server and ServerClaim on the bootstrap cluster (see [2.3](#23-metal-control-plane)). These JSONs are used in [5.3](#53-restore-status) to patch back status after the move, since `clusterctl move` drops status subresources.
+3. **Capture the Server and ServerClaim objects (full JSON)**: From the bootstrap cluster, save the mgmt-2 `Server` resource and the `ServerClaim` that binds it to the CAPI machine - both including their `.status`. They are the only Server and ServerClaim on the bootstrap cluster (see [2.3](#_2-3-metal-control-plane)). These JSONs are used in [5.3](#_5-3-restore-status) to patch back status after the move, since `clusterctl move` drops status subresources.
    ```bash
    kubectl --kubeconfig /etc/kubernetes/admin.conf get server.metal.ironcore.dev -o json | jq '.items[0]' > server-mgmt-2.json
    kubectl --kubeconfig /etc/kubernetes/admin.conf -n capi-provider-ironcore-metal-system get serverclaim.metal.ironcore.dev -o json | jq '.items[0]' > serverclaim-mgmt-2.json
@@ -504,7 +533,7 @@ The namespace on the target is the same as the source: `capi-provider-ironcore-m
 
 After the move, two status subresources need manual patching on the CAPI cluster:
 
-1. **Restore Server status**: Patch the mgmt-2 `Server` resource's `.status` subresource from the JSON captured in [5.1](#51-prepare-the-bootstrap-cluster). The name and status are both taken from the captured JSON:
+1. **Restore Server status**: Patch the mgmt-2 `Server` resource's `.status` subresource from the JSON captured in [5.1](#_5-1-prepare-the-bootstrap-cluster). The name and status are both taken from the captured JSON:
    ```bash
    NAME=$(jq -r '.metadata.name' server-mgmt-2.json)
    STATUS=$(jq -c '{status: .status}' server-mgmt-2.json)
@@ -512,7 +541,7 @@ After the move, two status subresources need manual patching on the CAPI cluster
    ```
    Without this, metal-operator would re-run the full discovery/probe cycle on mgmt-2 - which takes minutes and would temporarily mark the server as unavailable, potentially confusing the running KubeadmControlPlane controller.
 
-2. **Restore ServerClaim status**: Patch the `ServerClaim`'s `.status` subresource from the JSON captured in [5.1](#51-prepare-the-bootstrap-cluster). The `ServerClaim` that binds mgmt-2 to the CAPI machine arrives with empty status. The name and status are both taken from the captured JSON:
+2. **Restore ServerClaim status**: Patch the `ServerClaim`'s `.status` subresource from the JSON captured in [5.1](#_5-1-prepare-the-bootstrap-cluster). The `ServerClaim` that binds mgmt-2 to the CAPI machine arrives with empty status. The name and status are both taken from the captured JSON:
    ```bash
    CLAIM=$(jq -r '.metadata.name' serverclaim-mgmt-2.json)
    STATUS=$(jq -c '{status: .status}' serverclaim-mgmt-2.json)
@@ -564,11 +593,11 @@ Up to this point the CAPI cluster runs a single control-plane node (mgmt-2). Thi
 
 > **Naming.** `mgmt-<zone>-N` in this guide, `mgmt-N` in commands, and the metal stack's `Server` CR name `mgmt-<zone>-N-system-0` are all the same physical host — `system-0` is instance 0 of chassis type `system`.
 
-mgmt-1 is still running the old bootstrap cluster - metal-operator powers it off automatically during discovery (via `--enforce-first-boot`, see [6.3](#63-wait-for-server-discovery)) so CAPI can reprovision it cleanly with the same Ignition config as mgmt-2 and mgmt-3.
+mgmt-1 is still running the old bootstrap cluster - metal-operator powers it off automatically during discovery (via `--enforce-first-boot`, see [6.3](#_6-3-wait-for-server-discovery)) so CAPI can reprovision it cleanly with the same Ignition config as mgmt-2 and mgmt-3.
 
 ### 6.1 Repoint CCM at the CAPI cluster
 
-During bootstrap the cloud-controller-manager's `metal-kubeconfig` secret was populated from the *bootstrap* cluster's `admin.conf` (the bootstrap role hardcodes that source, see [4.2.1](#421-cloud-controller-manager)) - even when Phase 4 ran the role against the CAPI cluster. After pivot the bootstrap cluster is torn down, so that kubeconfig no longer points at a running API. Repoint the CCM at the CAPI cluster now, before new nodes appear, so it can reconcile them (match nodes to `IroncoreMetalMachine` objects via `providerID` and assign pod CIDRs). Re-create the secret from the CAPI kubeconfig and restart the CCM deployment:
+During bootstrap the cloud-controller-manager's `metal-kubeconfig` secret was populated from the *bootstrap* cluster's `admin.conf` (the bootstrap role hardcodes that source, see [4.2.1](#_4-2-1-cloud-controller-manager)) - even when Phase 4 ran the role against the CAPI cluster. After pivot the bootstrap cluster is torn down, so that kubeconfig no longer points at a running API. Repoint the CCM at the CAPI cluster now, before new nodes appear, so it can reconcile them (match nodes to `IroncoreMetalMachine` objects via `providerID` and assign pod CIDRs). Re-create the secret from the CAPI kubeconfig and restart the CCM deployment:
 
 ```bash
 export KUBECONFIG=/etc/kubernetes/capi.kubeconfig
@@ -593,7 +622,7 @@ Until now, only mgmt-2 was known to the metal stack. Extend the two discovery co
      - name: mgmt-<zone>-3
        macAddress: <mgmt-3-oob-mac>
    ```
-   Add mgmt-1 and mgmt-3 to `metal-config-<zone>.yaml` (mgmt-2 is already there from [Phase 2](#23-metal-control-plane)), then apply it:
+   Add mgmt-1 and mgmt-3 to `metal-config-<zone>.yaml` (mgmt-2 is already there from [Phase 2](#_2-3-metal-control-plane)), then apply it:
    ```bash
    kubectl create configmap metal-config-oob -n fedhcp \
      --from-file=metal-config.yaml=metal-config-<zone>.yaml \
@@ -623,16 +652,16 @@ Until now, only mgmt-2 was known to the metal stack. Extend the two discovery co
 
 ### 6.3 Wait for Server discovery
 
-After updating the discovery configuration ([6.2](#62-update-discovery-configuration)), metal-operator discovers mgmt-1 and mgmt-3 via their BMC DHCP leases (same mechanism as [Phase 3](#phase-3-create-capi-cluster)). Wait until both `Server` objects exist:
+After updating the discovery configuration ([6.2](#_6-2-update-discovery-configuration)), metal-operator discovers mgmt-1 and mgmt-3 via their BMC DHCP leases (same mechanism as [Phase 3](#phase-3-create-capi-cluster)). Wait until both `Server` objects exist:
 
 ```bash
 kubectl get server.metal.ironcore.dev/mgmt-<zone>-1-system-0
 kubectl get server.metal.ironcore.dev/mgmt-<zone>-3-system-0
 ```
 
-This can take a while - same BMC DHCP lease dependency as in [3.1](#31-prepare-the-server-resource).
+This can take a while - same BMC DHCP lease dependency as in [3.1](#_3-1-prepare-the-server-resource).
 
-**metal-operator must run with [`--enforce-first-boot=true`](https://github.com/ironcore-dev/metal-operator/blob/main/cmd/main.go#L158)** for the redeploy in this phase. mgmt-1 is still powered on (running the bootstrap cluster), and by default metal-operator does not power off a server that is already on during discovery, so its `Server` would stay in `Initial` and never enter the probe cycle. With `--enforce-first-boot`, the controller itself powers mgmt-1 off and drives it through discovery -> probe -> `Available`, exactly like mgmt-3. Once both servers are discovered, wait for `state: Available` on both (same as [3.1](#31-prepare-the-server-resource)):
+**metal-operator must run with [`--enforce-first-boot=true`](https://github.com/ironcore-dev/metal-operator/blob/main/cmd/main.go#L158)** for the redeploy in this phase. mgmt-1 is still powered on (running the bootstrap cluster), and by default metal-operator does not power off a server that is already on during discovery, so its `Server` would stay in `Initial` and never enter the probe cycle. With `--enforce-first-boot`, the controller itself powers mgmt-1 off and drives it through discovery -> probe -> `Available`, exactly like mgmt-3. Once both servers are discovered, wait for `state: Available` on both (same as [3.1](#_3-1-prepare-the-server-resource)):
 
 ```bash
 kubectl wait --for=jsonpath='{.status.state}'=Available server.metal.ironcore.dev/mgmt-<zone>-1-system-0 --timeout=40m
@@ -641,14 +670,14 @@ kubectl wait --for=jsonpath='{.status.state}'=Available server.metal.ironcore.de
 
 ### 6.4 Annotate and label new Servers
 
-Same as [Phase 3.1](#31-prepare-the-server-resource) - each new Server needs its networking annotations and CAPI labels. For mgmt-1 and mgmt-3:
+Same as [Phase 3.1](#_3-1-prepare-the-server-resource) - each new Server needs its networking annotations and CAPI labels. For mgmt-1 and mgmt-3:
 
 | Server | `prefix` | Labels |
 |--------|-----------|--------|
 | `mgmt-<zone>-1-system-0` | `2001:db8:1111:1::/64` | `type=mgmt`, `clusterapi-controlplane=` |
 | `mgmt-<zone>-3-system-0` | `2001:db8:1111:3::/64` | `type=mgmt`, `clusterapi-controlplane=` |
 
-The `clusterapi-controlplane=` label matches the `serverSelector` in the `IroncoreMetalMachineTemplate` (see [3.2](#32-capi-resources)), which is how CAPI binds new machines to available servers.
+The `clusterapi-controlplane=` label matches the `serverSelector` in the `IroncoreMetalMachineTemplate` (see [3.2](#_3-2-capi-resources)), which is how CAPI binds new machines to available servers.
 
 ### 6.5 Scale KubeadmControlPlane to 3 replicas
 
@@ -662,7 +691,7 @@ kubectl -n capi-provider-ironcore-metal-system \
 
 `maxSurge: 0` ensures CAPI does not try to provision a fourth machine during rolling updates - important because the cluster has exactly 3 management servers, so a surge would have no server to bind to and would stall.
 
-Both mgmt-1 and mgmt-3 are `Available` already ([6.3](#63-wait-for-server-discovery)), so both new machines get claimed immediately and provision in parallel. mgmt-1's provisioning starts with a reprovision of the physical server: metal-operator already powered it off during discovery, so the bootstrap cluster on it is gone and CAPI owns mgmt-1 from here on.
+Both mgmt-1 and mgmt-3 are `Available` already ([6.3](#_6-3-wait-for-server-discovery)), so both new machines get claimed immediately and provision in parallel. mgmt-1's provisioning starts with a reprovision of the physical server: metal-operator already powered it off during discovery, so the bootstrap cluster on it is gone and CAPI owns mgmt-1 from here on.
 
 > **Checkpoint.** Both new machines are provisioning - they go through the same HTTPBoot + Ignition path as mgmt-2 did in [Phase 3](#phase-3-create-capi-cluster), so provisioning them takes a comparable amount of time (OS install + kubeadm join).
 >
@@ -683,7 +712,7 @@ Both mgmt-1 and mgmt-3 are `Available` already ([6.3](#63-wait-for-server-discov
 
 ### 6.6 All three control-plane nodes join
 
-With mgmt-1 and mgmt-3 claimed in [6.5](#65-scale-kubeadmcontrolplane-to-3-replicas), CAPI boots both via HTTPBoot with the same GardenLinux image and Ignition config as mgmt-2 and joins them to the cluster as control-plane nodes. Note: the [6.3](#63-wait-for-server-discovery) power-off of mgmt-1 permanently retires the bootstrap cluster - make sure [Phase 5](#phase-5-pivot-clusterctl-move) completed before starting this phase.
+With mgmt-1 and mgmt-3 claimed in [6.5](#_6-5-scale-kubeadmcontrolplane-to-3-replicas), CAPI boots both via HTTPBoot with the same GardenLinux image and Ignition config as mgmt-2 and joins them to the cluster as control-plane nodes. Note: the [6.3](#_6-3-wait-for-server-discovery) power-off of mgmt-1 permanently retires the bootstrap cluster - make sure [Phase 5](#phase-5-pivot-clusterctl-move) completed before starting this phase.
 
 > **Checkpoint.** All three control-plane nodes are members of the CAPI cluster. etcd has achieved quorum across three members.
 >
