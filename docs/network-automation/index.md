@@ -12,5 +12,5 @@ a Kubernetes-based architecture to streamline the deployment, configuration, and
 
 The IronCore project supports different vendors and device types through dedicated operators. Below are some of the key components:
 
-- [network-operator](https://ironcore.dev/network-operator/): Automation for Cisco NX-OS devices.
+- [network-operator](https://wireapi.dev/): Automation for Cisco NX-OS and IOS-XR, Nokia SR-Linux, and OpenConfig compatible devices.
 - [sonic-operator](https://ironcore.dev/sonic-operator/): Automation for Sonic Edgecore switches.
