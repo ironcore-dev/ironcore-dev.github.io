@@ -20,7 +20,8 @@ the [local](https://kubernetes.io/docs/concepts/storage/volumes/#local) volume t
 Alternatively, any local storage implementation that is compatible with Kubernetes can be used.
 
 Additionally, the IronCore [Cloud Controller Manager](/baremetal/kubernetes/cloud-controller-manager) provides the necessary
-integration points of handling the `Node` lifecycle and topology information.
+integration points for handling the `Node` lifecycle and topology information, and optionally
+[assigning pod CIDRs](/baremetal/kubernetes/cloud-controller-manager#pod-cidr-assignment).
 
 Load balancing for `Services` of type `LoadBalancer` is done by the [metal-load-balancer-controller](/baremetal/kubernetes/metal-loadbalancer-controller).
 

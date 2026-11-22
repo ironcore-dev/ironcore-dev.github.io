@@ -12,7 +12,9 @@ The `metal-loadbalancer-controller` is designed to work in an IPv6 only environm
 
 The controller component has the following responsibilities:
 - Watches for changes in `Service` resources of type `LoadBalancer` and uses the `ClusterIP` of a `Service` and patches the `LoadBalancer` status using this `ClusterIP`.
-- Setting the `PodCIDRs` on the `Node` resources to ensure that the load balancer can route traffic to the pods. Here it takes the main `Node` IP address and the configured `node-cidr-mask-size` and patches the `Node.spec.podCIDRs` field.
+
+The `metal-load-balancer-controller` does not manage pod CIDRs. See [Pod CIDR Assignment](/baremetal/kubernetes/cloud-controller-manager#pod-cidr-assignment)
+for the corresponding functionality in the bare-metal Cloud Controller Manager.
 
 ## Metalbond-Speaker
 

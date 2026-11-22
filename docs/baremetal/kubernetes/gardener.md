@@ -21,6 +21,6 @@ is responsible for providing the necessary integration points for Gardener to ma
 
 Those integration points include:
 - Configure the [Cloud Controller Manager](/baremetal/kubernetes/cloud-controller-manager) to handle the `Node` lifecycle
-and topology information.
+and topology information, and optionally to [assign pod CIDRs](/baremetal/kubernetes/cloud-controller-manager#pod-cidr-assignment).
 - Configure the [metal-load-balancer-controller](/baremetal/kubernetes/metal-loadbalancer-controller) to handle `Service` of type `LoadBalancer`.
 - Configure the [Machine Controller Manager (MCM)](#machine-controller-manager-mcm) to manage the creation of `Nodes` in the cluster.
