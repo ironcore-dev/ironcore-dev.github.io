@@ -1,3 +1,7 @@
+---
+outline: [2, 4]
+---
+
 # Management Cluster Bootstrap Guide
 
 ::: info
@@ -135,7 +139,7 @@ Then run `kubeadm init --config /root/kubeadm-init.yaml`.
 After `kubeadm init` completes, a few IronCore-specific fixups:
 
 - **Approve kubelet serving CSRs**: Because we set `serverTLSBootstrap: true`, the kubelet requests its serving certificate via CSR. Approve the pending CSRs signed by `kubernetes.io/kubelet-serving`.
-- **Patch the node's `podCIDRs`**: kubeadm does not assign one because the metal stack runs with `--allocate-node-cidrs=false` (pod CIDRs are assigned by the cloud-controller-manager on CAPI clusters). Patch the node manually with the node's `/112` pod CIDR - a sub-range of its `/64` host prefix, offset to `::1:0` so it does not overlap the node's own `::1` loopback (see [Prerequisites](#prerequisites-before-running-any-phase)), e.g. `2001:db8:1111:1::1:0/112` for mgmt-1.
+- **Patch the node's `podCIDRs`**: kubeadm does not assign pod CIDRs, those are assigned by the cloud-controller-manager on CAPI clusters only. Patch the node manually with the node's `/112` pod CIDR - a sub-range of its `/64` host prefix, offset to `::1:0` so it does not overlap the node's own `::1` loopback (see [Prerequisites](#prerequisites-before-running-any-phase)), e.g. `2001:db8:1111:1::1:0/112` for mgmt-1.
 - **Prepend the cluster DNS to `/etc/resolv.conf`**: Add the CoreDNS *external* LoadBalancer address (`SVC_CIDR::1:a`) as the first nameserver on the inband machines so kubectl and curl can resolve in-cluster service names like `metaldata.example.com` and `boot.onmetal.de` that CoreDNS rewrites internally. In Phase 2 we deploy CoreDNS as a `LoadBalancer` service; the load balancer assigns each `SVC_CIDR::XYZ` cluster IP a publicly routable counterpart at `SVC_CIDR::1:XYZ`. In this case: cluster IP `SVC_CIDR::a` maps to external IP `SVC_CIDR::1:a`. The inband machines use the external address because they do not sit on the cluster's service network. We use [metal-load-balancer-controller](https://github.com/ironcore-dev/metal-load-balancer-controller) with FRR to announce these addresses via BGP; alternatively, use a publicly available load balancer like MetalLB.
 
 Once these are done, the bootstrap cluster is a functional single-node Kubernetes ready to receive the metal stack (Phase 2).
@@ -293,8 +297,6 @@ instance metadata service, reachable at `metaldata.example.com` (rewritten by Co
 announces `LoadBalancer` service IPs via BGP/FRR. Maps each `SVC_CIDR::XYZ` cluster IP to a publicly routable `SVC_CIDR::1:XYZ` address (see [1.3](#_1-3-post-install)). Applied via kustomize on top of the latest release of [metal-load-balancer-controller](https://github.com/ironcore-dev/metal-load-balancer-controller) (`config/default`) with these additions/patches:
 - **Manager on the host network**: `hostNetwork: true` and `hostPID: true` so the controller can peer with the host's FRR instance (set up as part of the network prerequisites) and announce the external LB addresses over the fabric BGP session.
 - **Metalbond speaker disabled**: The upstream chart ships a `metal-load-balancer-speaker-controller` DaemonSet (for setups that use metalbond to announce LB IPs). We announce via the fabric BGP directly, so this DaemonSet is deleted via a kustomize `$patch: delete`.
-- **Controller args**:
-  - `--allocate-node-cidr=false` - node pod CIDRs are handled by the cloud-controller-manager on the CAPI cluster (see [Phase 4](#phase-4-deploy-metal-stack-on-capi-cluster)); on the bootstrap cluster they are patched manually ([1.3](#_1-3-post-install)). MLBc itself does not touch pod CIDRs.
 
 #### 2.4.4 CoreDNS
 
