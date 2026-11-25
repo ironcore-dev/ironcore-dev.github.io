@@ -34,6 +34,7 @@ export default withMermaid({
       {text: 'Overview', link: '/overview/'},
       {text: 'Guides',
       items: [
+        {text: 'Lights-Out to Running Cluster', link: '/guides/lights-out-to-running-cluster'},
         {text: 'Management Cluster', link: '/guides/mgmt-cluster-bootstrap'},
       ]},
       {text: 'Documentation',
