@@ -32,9 +32,9 @@ export default withMermaid({
     nav: [
       {text: 'Home', link: '/'},
       {text: 'Overview', link: '/overview/'},
-      {text: 'Tutorials',
+      {text: 'Guides',
       items: [
-        {text: 'Management Cluster', link: '/tutorials/mgmt-cluster-bootstrap'},
+        {text: 'Management Cluster', link: '/guides/mgmt-cluster-bootstrap'},
       ]},
       {text: 'Documentation',
       items: [

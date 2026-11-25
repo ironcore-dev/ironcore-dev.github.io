@@ -316,7 +316,7 @@ Key Corefile differences from the upstream default:
 > ```bash
 > kubectl get pods -A                                                # all Ready
 > kubectl get crds | grep -E 'metal.ironcore.dev|boot.ironcore.dev|ironcoremetal'
-> kubectl get svc -n kube-system kube-dns                            # LoadBalancer with EXTERNAL-IP ${SVC_CIDR%%/*}::1:a
+> kubectl get svc -n kube-system kube-dns                            # LoadBalancer with EXTERNAL-IP ${SVC_CIDR%%/*}1:a
 > kubectl get node mgmt-1 -o wide                                    # STATUS=Ready, INTERNAL-IP=2001:db8:1111:1::1
 > kubectl get node mgmt-1 -o jsonpath='{.spec.taints}' ; echo        # expect: [] (or unset)
 > kubectl get node mgmt-1 -o jsonpath='{.spec.podCIDRs}' ; echo      # expect: ["2001:db8:1111:1::1:0/112"]
@@ -327,13 +327,13 @@ Key Corefile differences from the upstream default:
 >
 > Verify from mgmt-1 (proves MLBc + BGP routing works):
 > ```bash
-> dig +short @${SVC_CIDR%%/*}::1:a kubernetes.default.svc.cluster.local AAAA           # CoreDNS answers
-> dig +short @${SVC_CIDR%%/*}::1:a boot.onmetal.de AAAA                                # CoreDNS rewrites to boot-operator external LB
-> curl -6 -sS -o /dev/null -w '%{http_code}\n' http://[${SVC_CIDR%%/*}::1:efac]:8083/  # boot-operator responds
-> curl -6 -sS -o /dev/null -w '%{http_code}\n' http://[${SVC_CIDR%%/*}::1:cafe]:30010/ # metal-registry responds
-> curl -6 -sS -o /dev/null -w '%{http_code}\n' http://metaldata.example.com/      # metaldata reachable via CoreDNS rewrite
-> nc -6 -uz ${SVC_CIDR%%/*}::1:1547 547                                                # FeDHCP OOB port open
-> nc -6 -uz ${SVC_CIDR%%/*}::1:547 547                                                 # FeDHCP inband port open
+> dig +short @${SVC_CIDR%%/*}1:a kubernetes.default.svc.cluster.local AAAA           # CoreDNS answers
+> dig +short @${SVC_CIDR%%/*}1:a boot.onmetal.de AAAA                                # CoreDNS rewrites to boot-operator external LB
+> curl -6 -sS -o /dev/null -w '%{http_code}\n' http://[${SVC_CIDR%%/*}1:efac]:8083/  # boot-operator responds
+> curl -6 -sS -o /dev/null -w '%{http_code}\n' http://[${SVC_CIDR%%/*}1:cafe]:30010/ # metal-registry responds
+> curl -6 -sS -o /dev/null -w '%{http_code}\n' http://metaldata.example.com/         # metaldata reachable via CoreDNS rewrite
+> nc -6 -uz ${SVC_CIDR%%/*}1:1547 547                                                # FeDHCP OOB port open
+> nc -6 -uz ${SVC_CIDR%%/*}1:547 547                                                 # FeDHCP inband port open
 > ```
 
 ---
