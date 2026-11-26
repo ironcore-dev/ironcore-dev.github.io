@@ -10,5 +10,14 @@
   },
   "dependencies": {
     "@plausible-analytics/tracker": "0.4.7"
+  },
+  "overrides": {
+    "mermaid": "~11.16.1",
+    "esbuild": "^0.25.0",
+    "katex": "^0.18.2"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "fsevents@2.3.3": true
   }
 }
