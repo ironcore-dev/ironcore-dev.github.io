@@ -383,7 +383,7 @@ Four resources define the cluster. Apply as a single kustomization:
    - `image: ghcr.io/ironcore-dev/gardenlinux/capi:<tag>`. The **CAPI variant** of the GardenLinux image (bundles kubeadm/kubelet), distinct from the plain metal image used by the metal-operator probe phase in [2.3](#_2-3-metal-control-plane).
    - `serverSelector.matchLabels: {clusterapi-controlplane: ""}` - picks up the label set in [3.1](#_3-1-prepare-the-server-resource).
 4. **`KubeadmControlPlane`** - CAPI kubeadm control-plane provider config.
-   - `machineTemplate.spec.infrastructureRef` points at the `IroncoreMetalMachineTemplate` above. `deletion.nodeDeletionTimeoutSeconds: 0` and `nodeDrainTimeoutSeconds: 0` - bare metal nodes are wiped on removal, so drain/deletion timeouts are meaningless; set to zero to avoid hanging on unresponsive nodes during scale-down or replacement.
+   - `machineTemplate.spec.infrastructureRef` points at the `IroncoreMetalMachineTemplate` above. `deletion.nodeDrainTimeoutSeconds: 0` and `nodeDeletionTimeoutSeconds: 0` allow CAPI to wait indefinitely for node draining and retry Kubernetes Node deletion indefinitely. This prioritizes graceful cleanup; if a node cannot drain or the workload API remains unavailable, Machine deletion or replacement can remain blocked and require manual intervention. Use finite positive timeouts if failed machines must be reclaimed automatically.
    - `replicas: 1` initially. Scaled to 3 in Phase 6 once the pivot is complete and the remaining Servers are discovered.
    - `version: <k8s_version>` - **same minor as the bootstrap cluster** ([1.1](#_1-1-host-preparation)); mismatches force an immediate upgrade cycle after pivot.
    - `format: ignition` - required because the OS image consumes Ignition. Matches the `EXP_KUBEADM_BOOTSTRAP_FORMAT_IGNITION` feature gate enabled during `clusterctl init` in [2.2](#_2-2-cluster-api).
@@ -414,9 +414,9 @@ Once the `KubeadmControlPlane` reports `initialized: true` and the API is reacha
 > Verify from the bootstrap cluster:
 > ```bash
 > export KUBECONFIG=/etc/kubernetes/admin.conf
-> kubectl get cluster mgmt-${ZONE}                                              # PHASE=Provisioned
-> kubectl get kubeadmcontrolplane mgmt-${ZONE}-controlplane                     # INITIALIZED=true, READY=true, REPLICAS=1
-> kubectl get ironcoremetalmachines -A                                         # one machine, READY=true
+> kubectl -n capi-provider-ironcore-metal-system get cluster mgmt-${ZONE}       # PHASE=Provisioned
+> kubectl -n capi-provider-ironcore-metal-system get kubeadmcontrolplane mgmt-${ZONE}-controlplane # INITIALIZED=true, READY=true, REPLICAS=1
+> kubectl get ironcoremetalmachines -A                                          # one machine, READY=true
 > kubectl -n capi-provider-ironcore-metal-system get secret mgmt-${ZONE}-kubeconfig -o jsonpath='{.data.value}' | base64 -d > /etc/kubernetes/capi.kubeconfig
 > KUBECONFIG=/etc/kubernetes/capi.kubeconfig kubectl get --raw='/readyz'        # expect: ok
 > KUBECONFIG=/etc/kubernetes/capi.kubeconfig kubectl get nodes                  # mgmt-2 NotReady (no CNI on CAPI cluster yet - Phase 4)
@@ -481,7 +481,7 @@ The cluster is ready to receive the CAPI resources via `clusterctl move` in Phas
 > kubectl get node mgmt-${ZONE}-2 -o jsonpath='{.spec.podCIDRs}' ; echo # expect: ["2001:db8:1111:2::1:0/112"] (CCM-assigned, not patched)
 > kubectl get pods -A | grep -E 'metal-operator|boot-operator|fedhcp'  # no Running pods (scaled to zero)
 > kubectl get pods -A | grep -E 'calico|cert-manager|coredns'          # all Running
-> for ns in metal-operator-system boot-operator-system fedhcp-system; do
+> for ns in metal-operator-system boot-operator-system fedhcp; do
 >   kubectl get deploy -n "$ns" -o jsonpath='{range .items[*]}{.metadata.name}={.spec.replicas}{"\n"}{end}'
 > done                                                                 # each deployment shows replicas=0
 > ```
