@@ -3,6 +3,14 @@
 # Install dependencies
 npm ci
 
+# Enable file polling: inotify events from macOS host edits do not reach the container through
+# Docker Desktop's bind mount, so live-reload only works with chokidar's polling watcher.
+#
+# Note on Linux polling is not required and these exports could be guarded to macOS. However, for
+# simplicity, keeping it uniform.
+export CHOKIDAR_USEPOLLING=true
+export CHOKIDAR_INTERVAL=2000
+
 # Run VitePress dev server
 npx vitepress dev docs --host 0.0.0.0 &
 
