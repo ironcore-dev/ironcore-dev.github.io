@@ -11,6 +11,6 @@ News, announcements, and technical deep dives from the IronCore project.
 
 <ul>
   <li v-for="post of posts" :key="post.url">
-    <a :href="post.url">{{ post.title }}</a> — {{ post.date }}
+    <a :href="post.url">{{ post.title }}</a> — {{ post.date }} · {{ post.author }}
   </li>
 </ul>

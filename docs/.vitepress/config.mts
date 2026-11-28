@@ -1,16 +1,23 @@
 import { withMermaid } from "vitepress-plugin-mermaid";
 import { fileURLToPath, URL } from 'node:url'
 import { readdirSync, readFileSync } from 'node:fs'
+import matter from 'gray-matter'
 
 // Blog posts list for docs/blog/index.md, generated at build time.
-// Expects `title` and `date` frontmatter in every docs/blog/*.md except index.md.
+// Requires `title`, `date`, and `author` frontmatter in every
+// docs/blog/*.md except index.md; the build fails if one is missing.
 const posts = readdirSync(new URL('../blog', import.meta.url))
   .filter((file) => file.endsWith('.md') && file !== 'index.md')
   .map((file) => {
-    const content = readFileSync(new URL(`../blog/${file}`, import.meta.url), 'utf-8')
+    const { data } = matter(readFileSync(new URL(`../blog/${file}`, import.meta.url), 'utf-8'))
+    if (!data.title || !data.date || !data.author) {
+      throw new Error(`docs/blog/${file} is missing required frontmatter: title, date, and author are mandatory`)
+    }
+    const date = data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date)
     return {
-      title: content.match(/^title:\s*(.+)$/m)?.[1] ?? file,
-      date: content.match(/^date:\s*(.+)$/m)?.[1] ?? '',
+      title: String(data.title),
+      date,
+      author: String(data.author),
       url: `/blog/${file.replace(/\.md$/, '')}`,
     }
   })

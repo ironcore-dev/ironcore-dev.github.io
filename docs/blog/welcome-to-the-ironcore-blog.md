@@ -1,23 +1,13 @@
 ---
 title: Welcome to the IronCore Blog
 date: 2025-10-22
+author: Andreas Fritzler
 ---
 
 # Welcome to the IronCore Blog
 
 Welcome to the first post of the IronCore blog. This is the place where we will share project news, release
 highlights, and technical deep dives about the IronCore ecosystem.
-
-## What is IronCore?
-
-IronCore is an open-source platform for cloud native infrastructure management. It bridges the gap between
-virtualized infrastructure and physical hardware management across three layers:
-
-- **Infrastructure as a Service (IaaS)**: compute, networking, and storage resources with cloud-like control,
-  built on Kubernetes-native APIs.
-- **Bare Metal Management**: discovery and provisioning of physical servers through the metal-operator and
-  boot-operator.
-- **Network Automation**: declarative network configuration for the infrastructure fabric.
 
 ## What to expect
 
@@ -26,6 +16,8 @@ Here is what we plan to publish in this blog:
 - **Release announcements**: what is new and noteworthy in each IronCore release.
 - **Architecture deep dives**: how the scheduling, runtime interface, pool lifecycle, and networking layers
   work under the hood.
+- **Idea sketches**: early concepts and design explorations, like the new network model.
+- **Operation protocols**: notes from real-world operations, such as version updates.
 - **Guides and tutorials**: practical walkthroughs, from getting started to advanced operations.
 - **Community updates**: events, contributions, and how to get involved.
 

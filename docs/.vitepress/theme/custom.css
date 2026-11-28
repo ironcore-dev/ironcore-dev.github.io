@@ -40,3 +40,9 @@ img[src='/search.png'] {
     width: 100%;
     aspect-ratio: 1 / 1;
 }
+
+/* blog post byline, rendered by the theme layout on blog post pages */
+.blog-post-meta {
+    color: var(--vp-c-text-2);
+    font-size: 0.9rem;
+}
