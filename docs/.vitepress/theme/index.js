@@ -1,9 +1,11 @@
 import DefaultTheme from 'vitepress/theme'
+import Layout from './Layout.vue'
 import { initAnalytics } from './utils/analytics'
 import './custom.css'
 
 export default {
   extends: DefaultTheme,
+  Layout,
   async enhanceApp({ router }) {
     // Plausible is browser-only; guard against SSR build (enhanceApp also runs in Node).
     // Await init so the 404 hook is installed before the initial navigation runs.
